@@ -22,11 +22,11 @@ Figuras en reports/fig/pm_columna.png y pm_muro.png
 
 NOTA DE CRITERIO (caso de conductor de los resultados):
   - Para la COLUMNA, la armadura asumida es 12phi25 (rho=1.20%).
-  - Para el MURO se usa la seccion unitaria del modelo (MUR_20: e=0.20 m,
-    longitud equivalente L=1.0 m, 2 capas phi12@200). No es la longitud
-    real del muro del nucleo, por lo que su capacidad es --por unidad de
-    longitud-- y la DCR puede indicar exceso de demanda: es un resultado
-    esperable que debe revisarse definiendo la longitud real del muro.
+  - Para el MURO se evalua la longitud REAL del nucleo (MUR_20: e=0.20 m,
+    L=9.42 m de la linea de muros 33/34/35 en X=42.50 m del modelo,
+    2 capas phi12@200). La demanda del tramo se compara contra la
+    capacidad de esa linea; la longitud queda pendiente de confirmar
+    con los planos del edificio.
 """
 import json
 import os
@@ -192,7 +192,7 @@ def main():
     os.makedirs(FIG, exist_ok=True)
 
     col = COL70()
-    muro = MUR20()
+    muro = MUR20(9.42)          # longitud real inferida del nucleo (X=42.50 m)
 
     env_col = curva_pm(col)
     env_mur = curva_pm(muro)
@@ -242,7 +242,8 @@ def main():
                        "pm_columna.png")
     fig_mur = graficar(muro, env_mur, vmur,
                        {k: v for k, v in dmur.items() if k in ("U3", "U4")},
-                       "Muro MUR_20 (1 m) — Envolvente P-M", "pm_muro.png")
+                       "Muro del núcleo MUR_20 (L=9,42 m) — Envolvente P-M",
+                       "pm_muro.png")
 
     resumen = {
         "secciones": {
@@ -269,10 +270,11 @@ def main():
         "criterios_grupo": [
             "Armadura de la columna ASUMIDA 12phi25 (rho=1.20%), pendiente "
             "de confrontar con planos.",
-            "El muro se evalua con la seccion unitaria MUR_20 (1 m x 0.2 m, "
-            "2 capas phi12@200): la DCR > 1 no implica deficit real de la "
-            "pared completa, sino que la representacion por unidad de "
-            "longitud debe reemplazarse por la longitud real del muro.",
+            "El muro del nucleo se evalua con su LONGITUD REAL inferida "
+            "(L=9.42 m, linea de muros 33/34/35 en X=42.50 m del modelo, "
+            "2 capas phi12@200): la DCR compara la demanda del tramo "
+            "(My=800.7 kN·m, nivel 1) contra la capacidad de esa linea. "
+            "Pendiente de confirmar la longitud con los planos.",
             "El momento efectivo de la columna es M_t = sqrt(My^2 + Mz^2) "
             "(primer aproximación biaxial sobre la envolvente uniaxial).",
         ],

@@ -119,14 +119,19 @@ def COL70():
                    "0.70x0.70 m, 12phi25 (4+4+4), rec. 40 mm, rho=1.20%")
 
 
-def MUR20():
-    """Muro e=20 cm, largo L=1.0 m: 2 capas de phi12@200 verticales."""
-    B, H = 200.0, 1000.0                    # ancho (espesor) x canto (largo)
+def MUR20(L=1.0):
+    """Muro e=20 cm, largo L [m] (por defecto pier equivalente de 1,0 m):
+    2 capas de phi12@200 verticales distribuidas en el largo."""
+    B = 200.0
+    H = 1000.0 * L
     as12 = np.pi * 12.0 ** 2 / 4.0          # 113.1 mm2
-    # 5 estaciones a 100,300,500,700,900 mm; cada una 2 phi12 (2 capas)
-    barras = [(2 * as12, z) for z in (100, 300, 500, 700, 900)]
-    return Seccion("MUR_20", B, H, barras,
-                   "muro e=20 cm, L=1.0 m, 2 capas phi12@200, rho_l=0.565%")
+    zs = list(range(100, int(H) - 100 + 1, 200))
+    barras = [(2 * as12, z) for z in zs]    # 2 capas por estacion
+    ast = sum(a for a, _ in barras)
+    rho = ast / (B * H) * 100.0
+    return Seccion(f"MUR_20 (L={L:g} m)", B, H, barras,
+                   f"muro e=20 cm, L={L:g} m, 2 capas phi12@200, "
+                   f"rho_l={rho:.3f}%")
 
 
 def integrar_fibras(sec, strips, phi, c):

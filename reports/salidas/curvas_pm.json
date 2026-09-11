@@ -5,8 +5,8 @@
       "descripcion": "0.70x0.70 m, 12phi25 (4+4+4), rec. 40 mm, rho=1.20%"
     },
     "muro": {
-      "nombre": "MUR_20",
-      "descripcion": "muro e=20 cm, L=1.0 m, 2 capas phi12@200, rho_l=0.565%"
+      "nombre": "MUR_20 (L=9.42 m)",
+      "descripcion": "muro e=20 cm, L=9.42 m, 2 capas phi12@200, rho_l=0.564%"
     }
   },
   "verificacion_rc": {
@@ -28,16 +28,16 @@
       }
     },
     "muro": {
-      "Pn0_kN": 6391.4,
-      "Pn0_max_permisible_08": 5113.1,
+      "Pn0_kN": 60197.8,
+      "Pn0_max_permisible_08": 48158.2,
       "balanceado": {
-        "c_mm": 529.4,
-        "Pb_kN": 2812.7,
-        "Mb_kNm": 879.1
+        "c_mm": 5470.6,
+        "Pb_kN": 29561.8,
+        "Mb_kNm": 78299.0
       },
-      "flexion_pura_Mn_kNm": 224.3,
-      "Pn0_acero_apegado": 5950.0,
-      "rho_%": 0.565,
+      "flexion_pura_Mn_kNm": 20174.6,
+      "Pn0_acero_apegado": 56049.0,
+      "rho_%": 0.564,
       "formulas": {
         "Pn0": "0.85 f'c (Ag - Ast) + fy Ast",
         "cb": "eps_cu * d / (eps_cu + ey)",
@@ -91,16 +91,16 @@
         "My_kNm": 800.7,
         "Mz_kNm": 3.0,
         "M_efectivo_kNm": 800.7,
-        "M_nom_capacidad_kNm": 224.3,
-        "DCR_M": 3.57
+        "M_nom_capacidad_kNm": 20174.6,
+        "DCR_M": 0.04
       },
       "U4": {
         "P_kN": 0.0,
         "My_kNm": -99.2,
         "Mz_kNm": 40.5,
         "M_efectivo_kNm": 107.2,
-        "M_nom_capacidad_kNm": 224.3,
-        "DCR_M": 0.48
+        "M_nom_capacidad_kNm": 20174.6,
+        "DCR_M": 0.01
       }
     }
   },
@@ -110,7 +110,7 @@
   },
   "criterios_grupo": [
     "Armadura de la columna ASUMIDA 12phi25 (rho=1.20%), pendiente de confrontar con planos.",
-    "El muro se evalua con la seccion unitaria MUR_20 (1 m x 0.2 m, 2 capas phi12@200): la DCR > 1 no implica deficit real de la pared completa, sino que la representacion por unidad de longitud debe reemplazarse por la longitud real del muro.",
+    "El muro del nucleo se evalua con su LONGITUD REAL inferida (L=9.42 m, linea de muros 33/34/35 en X=42.50 m del modelo, 2 capas phi12@200): la DCR compara la demanda del tramo (My=800.7 kN·m, nivel 1) contra la capacidad de esa linea. Pendiente de confirmar la longitud con los planos.",
     "El momento efectivo de la columna es M_t = sqrt(My^2 + Mz^2) (primer aproximación biaxial sobre la envolvente uniaxial)."
   ]
 }
