@@ -240,11 +240,11 @@ def main():
             "DCR_M": round(dcr, 2) if cap else None,
         }
 
-    fig_col = graficar(col, env_col, vcol, dcol, "Columna COL_70 — Envolvente P-M",
+    fig_col = graficar(col, env_col, vcol, dcol, "Columna 11020 (COL_70) — Envolvente P-M",
                        "pm_columna.png")
     fig_mur = graficar(muro, env_mur, vmur,
                        {k: v for k, v in dmur.items() if k in ("U3", "U4")},
-                       "Muro del núcleo MUR_20 (pier 1 m) — Envolvente P-M",
+                       "Muro 11033 (MUR_20, pier 1 m) — Envolvente P-M",
                        "pm_muro.png")
 
     resumen = {
