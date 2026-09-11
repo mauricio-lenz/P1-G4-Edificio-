@@ -1,6 +1,16 @@
-# Entrega P1A3 — Semana 03: Análisis sísmico estático, superposición y diseño de secciones
+# P1A3 — AVANCE: casos base y curvas de interacción
 
-**Equipo 4** · Curso de Estructuras de Hormigón Armado · **Fecha: 11 de septiembre de 2026**
+**Entrega — Semana 03** · **Equipo 4** · Curso de Estructuras de Hormigón Armado · **Fecha de entrega: viernes 11 de septiembre de 2026**
+
+### Cobertura de la rúbrica
+
+| Criterio de la rúbrica | Puntos | Secciones del reporte |
+|---|---|---|
+| Casos base y sismo | 4 | §1 (G, Q, EX, EY) y §3 (pesos, fuerzas, V0, desplazamientos, rotación de diafragmas) |
+| Superposición | 4 | §2 (carga viva) y §4 (3+ combinaciones, superpuesta vs corrida directa) |
+| M-φ | 3 | §5 (definición, axial, curva, EI0, criterio de término, sensibilidad) |
+| P-M columna + muro | 5 | §6 (columna) y §7 (muro) |
+| Verificación RC, IA y comprensión | 4 | §8 (chequeos HA simplificados) y §10 (uso de IA y criterios revisados) |
 
 Modelo elástico 3D en OpenSeesPy (`ndm=3, ndf=6`, diafragmas rígidos, base empotrada) del edificio descrito en `DOCUMENTO_EDIFICIO.md`. Esta entrega cierra el **péptico de análisis**: casos base gravitatorios y sísmicos, validación del camino de cargas, sismo pseudo-estático, superposición de combinaciones, y las primeras piezas de **diseño de secciones** (momento-curvatura, curvas P-M, verificación RC y demanda-capacidad).
 
@@ -117,25 +127,25 @@ Las fuerzas `Fi` se aplican como fuerzas nodales horizontales en el nodo maestro
 
 **Caso EX** (u en X = dirección de la fuerza)
 
-| Nivel | ux [m] | Drift (entre niveles) |
-|---|---|---|
-| 5 | 0,0559 | 0,0020 |
-| 4 | 0,0480 | 0,0029 |
-| 3 | 0,0367 | 0,0036 |
-| 2 | 0,0226 | 0,0036 |
-| 1 | 0,0082 | 0,0021 |
+| Nivel | ux [m] | Drift (entre niveles) | rz diafragma [rad] |
+|---|---|---|---|
+| 5 | 0,0559 | 0,0020 | 0,0004 |
+| 4 | 0,0480 | 0,0029 | 0,0003 |
+| 3 | 0,0367 | 0,0036 | 0,0003 |
+| 2 | 0,0226 | 0,0036 | 0,0002 |
+| 1 | 0,0082 | 0,0021 | 0,0001 |
 
 **Caso EY** (u en Y)
 
-| Nivel | uy [m] | Drift (entre niveles) |
-|---|---|---|
-| 5 | 0,0686 | 0,0020 |
-| 4 | 0,0607 | 0,0033 |
-| 3 | 0,0477 | 0,0043 |
-| 2 | 0,0307 | 0,0047 |
-| 1 | 0,0122 | 0,0031 |
+| Nivel | uy [m] | Drift (entre niveles) | rz diafragma [rad] |
+|---|---|---|---|
+| 5 | 0,0686 | 0,0020 | −0,0003 |
+| 4 | 0,0607 | 0,0033 | −0,0003 |
+| 3 | 0,0477 | 0,0043 | −0,0002 |
+| 2 | 0,0307 | 0,0047 | −0,0002 |
+| 1 | 0,0122 | 0,0031 | −0,0001 |
 
-La estructura se desplaza más en Y (núcleo con menos rigidez en esa dirección); la deriva de entrepiso máxima (EY, nivel 2) es **0,0047**, dentro del rango típico elástico para análisis preliminar (la rotación de los diafragmas `rz` es pequeña, ≤ 0,0004 rad).
+La estructura se desplaza más en Y (núcleo con menos rigidez en esa dirección); la deriva de entrepiso máxima (EY, nivel 2) es **0,0047**, dentro del rango típico elástico para análisis preliminar. La **rotación de los diafragmas** es pequeña y crece con la altura (máx. |rz| = 0,0004 rad en EX y 0,0003 rad en EY), lo que indica acoplamiento de torsión modesto entre los planos rígidos del núcleo y los bordes.
 
 ---
 
@@ -157,7 +167,7 @@ Se definieron combinaciones con **tres o más casos** (se precisó 3+ combinacio
 Se completó cada combinación de dos maneras independientes:
 
 1. **Superposición algebraica** de los vectores de esfuerzos de los casos base (`M = Σ αi·Mi`), y
-2. **Corrida directa** del modelo con las cargas combinadas.
+2. **Corrida directa en OpenSeesPy** del modelo con las cargas combinadas aplicadas simultáneamente.
 
 Para los tres elementos gobernantes (columna F-2, viga de mayor momento y muro del núcleo) en las 4 combinaciones y las componentes P–My–Mz, la diferencia resultados es de orden **1e‑13/1e‑14 absoluto** (es decir, **0,0000 %**): el modelo es **lineal elástico** y la superposición es válida. Tabla extractada de `reports/salidas/combinaciones.json`:
 
