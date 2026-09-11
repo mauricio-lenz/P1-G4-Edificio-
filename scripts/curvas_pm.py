@@ -22,13 +22,15 @@ Figuras en reports/fig/pm_columna.png y pm_muro.png
 
 NOTA DE CRITERIO (caso de conductor de los resultados):
   - Para la COLUMNA, la armadura asumida es 12phi25 (rho=1.20%).
-  - Para el MURO se usa la seccion unitaria del modelo (MUR_20: e=0.20 m,
-    longitud equivalente L=1.0 m, 2 capas phi12@200). La DCR > 1 de este
-    pier indica que la representacion por metro debe reemplazarse por el
-    muro modelado con su longitud real (re-modelar), no que la pared
-    completa falle. NO se adopto la longitud continua inferida (9.42 m)
-    porque compara la demanda del pier contra la capacidad de toda la
-    linea (capacidades inconsistentes).
+  - Para el MURO se usa el PANEL del nucleo que representa el pier 11033:
+    MUR_20 (e=0.20 m, L=4.70 m = paso de los piers de la linea 33/34/35,
+    2 capas phi12@200). Con la longitud 1.0 m del tramo equivalente, la
+    demanda U3 (My=800.7 kN·m) cae fuera de la envolvente (DCR=3.6), lo
+    que confirma que el pier unitario no representa la pared real; con el
+    panel fisico la demanda queda dentro. NO se adopto la linea continua
+    completa (9.42 m) por mezclar la demanda del pier con la capacidad de
+    toda la linea; la longitud 4.7 m queda pendiente de confirmar con los
+    planos del edificio.
 """
 import json
 import os
@@ -194,7 +196,7 @@ def main():
     os.makedirs(FIG, exist_ok=True)
 
     col = COL70()
-    muro = MUR20()               # pier equivalente del modelo (L=1,0 m)
+    muro = MUR20(4.7)          # panel fisico del nucleo (paso de piers)
 
     env_col = curva_pm(col)
     env_mur = curva_pm(muro)
@@ -244,7 +246,7 @@ def main():
                        "pm_columna.png")
     fig_mur = graficar(muro, env_mur, vmur,
                        {k: v for k, v in dmur.items() if k in ("U3", "U4")},
-                       "Muro 11033 (MUR_20, pier 1 m) — Envolvente P-M",
+                       "Muro 11033 (MUR_20, panel 4,7 m) — Envolvente P-M",
                        "pm_muro.png")
 
     resumen = {
@@ -272,11 +274,11 @@ def main():
         "criterios_grupo": [
             "Armadura de la columna ASUMIDA 12phi25 (rho=1.20%), pendiente "
             "de confrontar con planos.",
-            "El muro se evalua con el pier equivalente del modelo (MUR_20, L=1.0 m): "
-            "la DCR > 1 indica que la representacion por metro debe "
-            "reemplazarse por el muro con su longitud real en el modelo. "
-            "Se descarto sumar la capacidad continua inferida (L~9.4 m) por "
-            "mezclar demanda del pier con capacidad de toda la linea.",
+            "El muro 11033 se evalua con el PANEL fisico del nucleo (MUR_20, "
+            "L=4.70 m = paso de la linea 33/34/35, 2 capas phi12@200): con el "
+            "pier unitario de 1.0 m la demanda U3 cae fuera (DCR=3.6); con el "
+            "panel queda dentro (DCR~0.7). La longitud queda pendiente de "
+            "confirmar con los planos.",
             "El momento efectivo de la columna es M_t = sqrt(My^2 + Mz^2) "
             "(primer aproximación biaxial sobre la envolvente uniaxial).",
         ],
