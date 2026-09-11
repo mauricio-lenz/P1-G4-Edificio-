@@ -128,15 +128,25 @@ def graficar(sec, env, verif, dem, titulo, archivo, demanda_color="tab:red"):
     cb = verif["balanceado"]["c_mm"]
     Pb = verif["balanceado"]["Pb_kN"]
     Mb = verif["balanceado"]["Mb_kNm"]
+    T = -FY * sec.Ast / 1e3     # traccion pura (kN)
+    mn_puro = min(env, key=lambda t: abs(t[0]))[1]   # flexion pura, P=0
+    # Envolvente cerrada: compresion pura -> barrido -> traccion pura
     x = np.array([m for _, m in env])
     y = np.array([p for p, _ in env])
+    loop_x = np.concatenate(([0.0], x, [0.0]))
+    loop_y = np.concatenate(([P0], y, [T]))
     fig, ax = plt.subplots(figsize=(8.5, 7))
-    ax.plot(x / 1e3, y, "b-", lw=2.2, label=f"Envolvente P-M ({sec.nombre})")
+    ax.plot(loop_x, loop_y, "b-", lw=2.2, label=f"Envolvente P-M ({sec.nombre})")
+    ax.fill(loop_x, loop_y, color="steelblue", alpha=0.12,
+            label="Dentro de la envolvente (seguro)")
     ax.axhline(0, color="k", lw=0.6)
     ax.axvline(0, color="k", lw=0.6)
     ax.plot(0, P0, "ko", ms=8, label=f"Pn0 = {P0:,.0f} kN (comp. pura)")
+    ax.plot(0, T, "ks", ms=7, label=f"Tracción pura = {T:,.0f} kN")
     ax.plot(Mb, Pb, "m*", ms=15,
             label=f"Balanceado (c={cb:,.0f} mm, Pb={Pb:,.0f} kN)")
+    ax.plot(mn_puro, 0, "bD", ms=7,
+            label=f"Flexión pura: Mn = {mn_puro:,.0f} kN·m")
     for etiqueta, punto in dem.items():
         P = punto["P"]
         M = punto["Mt"]

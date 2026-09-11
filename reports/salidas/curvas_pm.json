@@ -18,7 +18,7 @@
         "Pb_kN": 7274.5,
         "Mb_kNm": 1865.1
       },
-      "flexion_pura_Mn_kNm": 791.6,
+      "flexion_pura_Mn_kNm": 794.0,
       "Pn0_acero_apegado": 14577.5,
       "rho_%": 1.202,
       "formulas": {
@@ -35,7 +35,7 @@
         "Pb_kN": 2812.7,
         "Mb_kNm": 879.1
       },
-      "flexion_pura_Mn_kNm": 213.0,
+      "flexion_pura_Mn_kNm": 228.4,
       "Pn0_acero_apegado": 5950.0,
       "rho_%": 0.565,
       "formulas": {
@@ -62,7 +62,7 @@
         "My_kNm": 1.3,
         "Mz_kNm": -15.0,
         "M_efectivo_kNm": 15.0,
-        "M_nom_capacidad_kNm": 1600.2,
+        "M_nom_capacidad_kNm": 1603.2,
         "DCR_M": 0.009,
         "P_Pn0": 0.207
       },
@@ -71,7 +71,7 @@
         "My_kNm": 2.0,
         "Mz_kNm": -23.6,
         "M_efectivo_kNm": 23.7,
-        "M_nom_capacidad_kNm": 1789.6,
+        "M_nom_capacidad_kNm": 1792.0,
         "DCR_M": 0.013,
         "P_Pn0": 0.327
       },
@@ -80,8 +80,8 @@
         "My_kNm": 1155.2,
         "Mz_kNm": -194.5,
         "M_efectivo_kNm": 1171.4,
-        "M_nom_capacidad_kNm": 1714.7,
-        "DCR_M": 0.683,
+        "M_nom_capacidad_kNm": 1718.0,
+        "DCR_M": 0.682,
         "P_Pn0": 0.273
       }
     },
@@ -91,16 +91,16 @@
         "My_kNm": 800.7,
         "Mz_kNm": 3.0,
         "M_efectivo_kNm": 800.7,
-        "M_nom_capacidad_kNm": 260.6,
-        "DCR_M": 3.07
+        "M_nom_capacidad_kNm": 266.0,
+        "DCR_M": 3.01
       },
       "U4": {
         "P_kN": 0.0,
         "My_kNm": -99.2,
         "Mz_kNm": 40.5,
         "M_efectivo_kNm": 107.2,
-        "M_nom_capacidad_kNm": 260.6,
-        "DCR_M": 0.41
+        "M_nom_capacidad_kNm": 266.0,
+        "DCR_M": 0.4
       }
     }
   },

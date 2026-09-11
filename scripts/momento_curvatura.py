@@ -199,7 +199,12 @@ def puntos_pm(sec, n_strips=64, c_max=None):
     P0 = 0.85 * FC * (sec.Ag - sec.Ast) + FY * sec.Ast   # N
     pts = [(P0, 0.0, 0.0, "compresion pura (Pn0)")]
 
-    cs = np.linspace(c_max, -c_max, 400)
+    zb = max(z for _, z in sec.barras)
+    cb = EPSCU * zb / (EPSCU + EY)                        # ACI 22.2.7: balanceado
+    cs = np.unique(np.concatenate([
+        np.linspace(c_max, cb, 500),                       # compression -> balanceado
+        np.linspace(cb, -c_max, 500),                      # balanceado -> traccion
+    ]))[::-1]
     for c in cs:
         P, M = integrar_pm(sec, strips, c)
         pts.append((P, abs(M), c, "barrido"))

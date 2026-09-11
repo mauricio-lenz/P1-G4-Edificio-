@@ -227,7 +227,7 @@ Se genera la **envolvente de interacción P-M** variando el eje neutro `c` con c
 |---|---|---|---|
 | Compresión pura (Pn0) | — | 16 876 | 0 |
 | Balanceado | 388 | 7 274 | 1 865 |
-| Flexión pura (P = 0) | ~65 | ≈ 0 | **792** |
+| Flexión pura (P = 0) | ~65 | ≈ 0 | **794** |
 | Tracción pura | — | −2 474 | 0 |
 
 La envolvente es convexa y el punto balanceado (P ≈ 7 274 kN) está por encima de las axiales de diseño reales (≈5 500 kN), por lo que el diseño de la columna estará controlado más por la combinación gravitatoria que por el momento sísmico. Figura: `reports/fig/pm_columna.png`.
@@ -242,9 +242,9 @@ La envolvente es convexa y el punto balanceado (P ≈ 7 274 kN) está por encima
 |---|---|---|
 | Compresión pura (0,85·f'c·Ag + fy·Ast) | 6 391 | 0 |
 | Balanceado | 2 813 | 879 |
-| Flexión pura (P = 0) | ≈ 0 | **213** |
+| Flexión pura (P = 0) | ≈ 0 | **228** |
 
-> La capacidad por flexión del tramo unitario (213 kN·m a P=0, ρ=0,565 %) es baja porque el muro del modelo es **un promedio por metro**: la DCR de §9 mostrará que la demanda real del muro del núcleo supera esta capacidad unitaria — esto es un **indicador de que hay que modelar la longitud real del muro** (ver §10). Figura: `reports/fig/pm_muro.png`.
+> La capacidad por flexión del tramo unitario (228 kN·m a P=0, ρ=0,565 %) es baja porque el muro del modelo es **un promedio por metro**: la DCR de §9 mostrará que la demanda real del muro del núcleo supera esta capacidad unitaria — esto es un **indicador de que hay que modelar la longitud real del muro** (ver §10). Figura: `reports/fig/pm_muro.png`.
 
 ---
 
@@ -257,7 +257,7 @@ Verificación con las fórmulas de compresión/control de ACI 318 (valores **nom
 | **Pn0 = 0,85·f'c·(Ag − Ast) + fy·Ast** [kN] | **16 876** | **6 391** |
 | Límite 0,8·Pn0 [kN] | 13 501 | 5 113 |
 | Punto balanceado (Pb, Mb) | (7 274 kN; 1 865 kN·m) | (2 813 kN; 879 kN·m) |
-| Flexión pura Mn [kN·m] | 792 | 213 |
+| Flexión pura Mn [kN·m] | 794 | 228 |
 | ρ [%] | 1,20 | 0,565 |
 
 Chequeo ACI de compresión pura: el término de la "meseta" 0,85·f'c actúa sobre (Ag−Ast) y el acero se lleva su fy; el punto balanceado se calcula con `c_b = εcu·d/(εcu + εy)`. Los tres valores característicos (Pn0, balanceado, flexión pura) quedan sobre la curva P-M, cerrándose la verificación de consistencia entre la fórmula de compresión pura y el integratorio de fibras.
@@ -270,16 +270,16 @@ Se ubican las **demandas reales** (de `combinaciones.json`, superposición valid
 
 | Elemento | Combo | P [kN] | My [kN·m] | Mz [kN·m] | M_ef [kN·m] | M_nom(cap) [kN·m] | P/(0,8·Pn0) | **DCR** = M_ef/M_nom |
 |---|---|---|---|---|---|---|---|---|
-| Columna F‑2 (11020) · niv. 1 | U1 (1,4G) | 3 496,1 | 1,3 | −15,0 | 15,0 | 1 600,2 | 0,26 | 0,009 |
-| Columna F‑2 (11020) · niv. 1 | U2 (1,2G+1,6Q) | 5 512,7 | 2,0 | −23,6 | 23,7 | 1 789,6 | 0,41 | 0,013 |
-| Columna F‑2 (11020) · niv. 1 | U3 (1,2G+Q+EX) | 4 609,9 | 1 155,2 | −194,5 | 1 171,4 | 1 714,7 | 0,34 | **0,68** |
-| Muro núcleo 11033 · niv. 1 | U3 (1,2G+Q+EX) | 0,0 | 800,7 | 3,0 | 800,7 | 260,6 | — | **3,07** ⚠ |
-| Muro núcleo 11033 · niv. 1 | U4 (0,9G+EY) | 0,0 | −99,2 | 40,5 | 107,2 | 260,6 | — | 0,41 |
+| Columna F‑2 (11020) · niv. 1 | U1 (1,4G) | 3 496,1 | 1,3 | −15,0 | 15,0 | 1 603,2 | 0,26 | 0,009 |
+| Columna F‑2 (11020) · niv. 1 | U2 (1,2G+1,6Q) | 5 512,7 | 2,0 | −23,6 | 23,7 | 1 792,0 | 0,41 | 0,013 |
+| Columna F‑2 (11020) · niv. 1 | U3 (1,2G+Q+EX) | 4 609,9 | 1 155,2 | −194,5 | 1 171,4 | 1 718,0 | 0,34 | **0,68** |
+| Muro núcleo 11033 · niv. 1 | U3 (1,2G+Q+EX) | 0,0 | 800,7 | 3,0 | 800,7 | 266,0 | — | **3,01** ⚠ |
+| Muro núcleo 11033 · niv. 1 | U4 (0,9G+EY) | 0,0 | −99,2 | 40,5 | 107,2 | 266,0 | — | 0,40 |
 
 Lectura:
 
 - **Columna OK.** El caso más exigente es U3 (sísmico +X) con **DCR = 0,68**: el punto de demanda (P≈4 610 kN, M≈1 171 kN·m) cae dentro de la envolvente con ~32% de holgura. La combinación gravitatoria U2 controla la **axial** (P/(0,8·Pn0) = 0,41 < 1).
-- **Muro ⚠ es un marcador de revisión del modelo, no un diagnóstico de colapso.** La demanda sísmica en el plano del núcleo (M = 800,7 kN·m, P ≈ 0) supera la capacidad unitaria de 1 m de MUR_20 (260,6 kN·m → DCR = 3,07). La causa es múltiple: (i) el muro del modelo es un **pier de 1,0 m** y no la longitud real de la pared del núcleo (7–9 m), por lo que su capacidad resistente es ~L veces mayor; (ii) los muros no reciben carga gravitatoria en el modelo (P=0), lo que los deja en la parte "baja" de la envolvente; y (iii) la demanda elástica corresponde a cortante sísmico sin reducción (V0 con C adoptado). La próxima iteración debe **modelar las paredes con su longitud real** y repartir la carga gravitatoria del núcleo, antes de concluir sobre la seguridad del muro.
+- **Muro ⚠ es un marcador de revisión del modelo, no un diagnóstico de colapso.** La demanda sísmica en el plano del núcleo (M = 800,7 kN·m, P ≈ 0) supera la capacidad unitaria de 1 m de MUR_20 (266,0 kN·m → DCR = 3,01). La causa es múltiple: (i) el muro del modelo es un **pier de 1,0 m** y no la longitud real de la pared del núcleo (7–9 m), por lo que su capacidad resistente es ~L veces mayor; (ii) los muros no reciben carga gravitatoria en el modelo (P=0), lo que los deja en la parte "baja" de la envolvente; y (iii) la demanda elástica corresponde a cortante sísmico sin reducción (V0 con C adoptado). La próxima iteración debe **modelar las paredes con su longitud real** y repartir la carga gravitatoria del núcleo, antes de concluir sobre la seguridad del muro.
 
 ---
 
