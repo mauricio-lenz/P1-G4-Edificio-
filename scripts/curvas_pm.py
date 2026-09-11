@@ -125,8 +125,6 @@ def cargar_demandas():
 
 
 def graficar(sec, env, verif, dem, titulo, archivo, demanda_color="tab:red"):
-    ag = sec.Ag / 1e6          # m2
-    ast = sec.Ast / 1e6
     P0 = verif["Pn0_kN"]
     cb = verif["balanceado"]["c_mm"]
     Pb = verif["balanceado"]["Pb_kN"]
@@ -179,8 +177,7 @@ def graficar(sec, env, verif, dem, titulo, archivo, demanda_color="tab:red"):
 
     ax.set_xlabel("Momento nominal M [kN·m]")
     ax.set_ylabel("Carga axial P [kN]  (compresión +)")
-    ax.set_title(f"{titulo}\n{sec.descripcion}\n"
-                 f"Ag={ag:.3f} m², Ast={ast:.4f} m²")
+    ax.set_title(titulo)
     ax.grid(alpha=0.4)
     ax.margins(x=0.05, y=0.08)
     fig.tight_layout()
@@ -241,11 +238,11 @@ def main():
             "DCR_M": round(dcr, 2) if cap else None,
         }
 
-    fig_col = graficar(col, env_col, vcol, dcol, "Columna COL_70 (eje F-2)",
+    fig_col = graficar(col, env_col, vcol, dcol, "Columna COL_70 — Envolvente P-M",
                        "pm_columna.png")
     fig_mur = graficar(muro, env_mur, vmur,
                        {k: v for k, v in dmur.items() if k in ("U3", "U4")},
-                       "Muro del nucleo MUR_20 (1 m)", "pm_muro.png")
+                       "Muro MUR_20 (1 m) — Envolvente P-M", "pm_muro.png")
 
     resumen = {
         "secciones": {
