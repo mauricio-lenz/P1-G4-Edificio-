@@ -141,33 +141,48 @@ def graficar(sec, env, verif, dem, titulo, archivo, demanda_color="tab:red"):
     y = np.array([p for p, _ in env])
     loop_x = np.concatenate(([0.0], x, [0.0]))
     loop_y = np.concatenate(([P0], y, [T]))
-    fig, ax = plt.subplots(figsize=(8.5, 7))
-    ax.plot(loop_x, loop_y, "b-", lw=2.2, label=f"Envolvente P-M ({sec.nombre})")
-    ax.fill(loop_x, loop_y, color="steelblue", alpha=0.12,
-            label="Dentro de la envolvente (seguro)")
+
+    fig, ax = plt.subplots(figsize=(9, 7))
+    ax.plot(loop_x, loop_y, "b-", lw=2.0)
+    ax.fill(loop_x, loop_y, color="steelblue", alpha=0.10)
     ax.axhline(0, color="k", lw=0.6)
     ax.axvline(0, color="k", lw=0.6)
-    ax.plot(0, P0, "ko", ms=8, label=f"Pn0 = {P0:,.0f} kN (comp. pura)")
-    ax.plot(M_d, P_d, "g^", ms=10,
-            label=f"Descompresión (c=H): P={P_d:,.0f} kN, M={M_d:,.0f} kN·m")
-    ax.plot(0, T, "ks", ms=7, label=f"Tracción pura = {T:,.0f} kN")
-    ax.plot(Mb, Pb, "m*", ms=15,
-            label=f"Balanceado (c={cb:,.0f} mm, Pb={Pb:,.0f} kN)")
-    ax.plot(mn_puro, 0, "bD", ms=7,
-            label=f"Flexión pura: Mn = {mn_puro:,.0f} kN·m")
-    for etiqueta, punto in dem.items():
+
+    # --- 5 puntos de interaccion: mismo simbolo, nombre al lado ---
+    puntos = [
+        (0.0, P0,      f"Pn0 (comp. pura) = {P0:,.0f} kN",        (8, -4)),
+        (M_d, P_d,     "Descompresión (c=H)",                    (8, 2)),
+        (Mb, Pb,       "Balanceado",                             (8, 2)),
+        (mn_puro, 0.0, "Flexión pura (P=0)",                     (8, 4)),
+        (0.0, T,       "Tracción pura",                          (8, -2)),
+    ]
+    for M, P, nom, off in puntos:
+        ax.plot(M, P, "o", ms=10, mfc="#1f77b4", mec="k", mew=1.2,
+                zorder=6)
+        ax.annotate(nom, (M, P), textcoords="offset points",
+                    xytext=off, fontsize=8.5, zorder=7,
+                    bbox=dict(boxstyle="round,pad=0.15", fc="white",
+                              ec="none", alpha=0.55))
+
+    # --- Demandas: cuadrados rojos con nombre al lado ---
+    for i, (etiqueta, punto) in enumerate(dem.items()):
         P = punto["P"]
         M = punto["Mt"]
-        ax.plot(M, P, "o", ms=9, color=demanda_color,
-                label=f"Demanda {etiqueta}: P={P:,.0f} kN, M={M:,.0f} kN·m")
-        ax.annotate(etiqueta, (M, P), textcoords="offset points",
-                    xytext=(10, 8), fontsize=9, color=demanda_color)
+        ax.plot(M, P, "s", ms=8, color=demanda_color, mec="k", mew=0.8,
+                zorder=6)
+        ax.annotate(f"Demanda {etiqueta}".replace("  ", " "), (M, P),
+                    textcoords="offset points",
+                    xytext=(8, 12 - 24 * i), fontsize=8,
+                    color=demanda_color, zorder=7,
+                    bbox=dict(boxstyle="round,pad=0.15", fc="white",
+                              ec="none", alpha=0.55))
+
     ax.set_xlabel("Momento nominal M [kN·m]")
     ax.set_ylabel("Carga axial P [kN]  (compresión +)")
     ax.set_title(f"{titulo}\n{sec.descripcion}\n"
                  f"Ag={ag:.3f} m², Ast={ast:.4f} m²")
-    ax.legend(fontsize=8, loc="lower right")
     ax.grid(alpha=0.4)
+    ax.margins(x=0.05, y=0.08)
     fig.tight_layout()
     ruta = os.path.join(FIG, archivo)
     fig.savefig(ruta, dpi=150)
