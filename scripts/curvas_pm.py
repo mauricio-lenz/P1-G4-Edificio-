@@ -132,7 +132,10 @@ def graficar(sec, env, verif, dem, titulo, archivo, demanda_color="tab:red"):
     Pb = verif["balanceado"]["Pb_kN"]
     Mb = verif["balanceado"]["Mb_kNm"]
     T = -FY * sec.Ast / 1e3     # traccion pura (kN)
-    mn_puro = min(env, key=lambda t: abs(t[0]))[1]   # flexion pura, P=0
+    # Punto de descompresion (c=H): maximo P del barrido, fibra inf. eps=0
+    P_d = max(p for p, _ in env)
+    M_d = max(m for p, m in env if abs(p - P_d) < 1.0)
+    mn_puro = capacidad_a_P(env, 0.0)                 # flexion pura, P=0
     # Envolvente cerrada: compresion pura -> barrido -> traccion pura
     x = np.array([m for _, m in env])
     y = np.array([p for p, _ in env])
@@ -145,6 +148,8 @@ def graficar(sec, env, verif, dem, titulo, archivo, demanda_color="tab:red"):
     ax.axhline(0, color="k", lw=0.6)
     ax.axvline(0, color="k", lw=0.6)
     ax.plot(0, P0, "ko", ms=8, label=f"Pn0 = {P0:,.0f} kN (comp. pura)")
+    ax.plot(M_d, P_d, "g^", ms=10,
+            label=f"Descompresión (c=H): P={P_d:,.0f} kN, M={M_d:,.0f} kN·m")
     ax.plot(0, T, "ks", ms=7, label=f"Tracción pura = {T:,.0f} kN")
     ax.plot(Mb, Pb, "m*", ms=15,
             label=f"Balanceado (c={cb:,.0f} mm, Pb={Pb:,.0f} kN)")

@@ -226,6 +226,7 @@ Se genera la **envolvente de interacción P-M** variando el eje neutro `c` con c
 | Punto | c [mm] | P [kN] | M [kN·m] |
 |---|---|---|---|
 | Compresión pura (Pn0) | — | 16 876 | 0 |
+| Descompresión (c = H, ε_inf = 0) | 700 | 14 392 | 1 007 |
 | Balanceado | 388 | 7 274 | 1 865 |
 | Flexión pura (P = 0) | ~65 | ≈ 0 | **804** |
 | Tracción pura | — | −2 474 | 0 |
@@ -241,6 +242,7 @@ La envolvente es convexa y el punto balanceado (P ≈ 7 274 kN) está por encima
 | Punto | P [kN] | M [kN·m] |
 |---|---|---|
 | Compresión pura (0,85·f'c·Ag + fy·Ast) | 6 391 | 0 |
+| Descompresión (c = H, ε_inf = 0) | 5 582 | 494 |
 | Balanceado | 2 813 | 879 |
 | Flexión pura (P = 0) | ≈ 0 | **224** |
 
