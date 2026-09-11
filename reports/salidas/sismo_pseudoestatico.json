@@ -1,0 +1,193 @@
+{
+  "parametros": {
+    "A0_g": 0.4,
+    "S_suelo": 1.05,
+    "I_importancia": 1.0,
+    "R": 5.5,
+    "C_calculado": 0.21,
+    "C_adoptado": 0.25,
+    "psi_carga_viva": 0.25,
+    "formula": "V0 = C*sum(Wi) ; Fi = V0*(Wi*hi)/sum(Wj*hj) ; Wi = A_piso*(G + psi*Q) + peso prop. estruct."
+  },
+  "a_piso_m2": 726.75,
+  "carga_muerta_kN_m2": 6.225,
+  "carga_viva_kN_m2": 3.92,
+  "peso_estructura_por_piso_kN": 4223.2,
+  "W_por_piso_kN": 9459.4,
+  "w_pisos_kN": {
+    "1": 9459.4,
+    "2": 9459.4,
+    "3": 9459.4,
+    "4": 9459.4,
+    "5": 9459.4
+  },
+  "W_total_kN": 47297.1,
+  "V0_kN": 11824.3,
+  "fuerzas_por_piso_kN": {
+    "1": 788.3,
+    "2": 1576.6,
+    "3": 2364.9,
+    "4": 3153.1,
+    "5": 3941.4
+  },
+  "desplazamientos_ex": {
+    "1": {
+      "ux_m": 0.0082,
+      "uy_m": -0.0001,
+      "rz_m": 0.0001
+    },
+    "2": {
+      "ux_m": 0.0226,
+      "uy_m": -0.0003,
+      "rz_m": 0.0002
+    },
+    "3": {
+      "ux_m": 0.0367,
+      "uy_m": -0.0005,
+      "rz_m": 0.0003
+    },
+    "4": {
+      "ux_m": 0.048,
+      "uy_m": -0.0006,
+      "rz_m": 0.0003
+    },
+    "5": {
+      "ux_m": 0.0559,
+      "uy_m": -0.0006,
+      "rz_m": 0.0004
+    }
+  },
+  "derivas_ex": {
+    "1": 0.0021,
+    "2": 0.0036,
+    "3": 0.0036,
+    "4": 0.0029,
+    "5": 0.002
+  },
+  "desplazamientos_ey": {
+    "1": {
+      "ux_m": -0.0001,
+      "uy_m": 0.0122,
+      "rz_m": -0.0001
+    },
+    "2": {
+      "ux_m": -0.0003,
+      "uy_m": 0.0307,
+      "rz_m": -0.0002
+    },
+    "3": {
+      "ux_m": -0.0005,
+      "uy_m": 0.0477,
+      "rz_m": -0.0002
+    },
+    "4": {
+      "ux_m": -0.0006,
+      "uy_m": 0.0607,
+      "rz_m": -0.0003
+    },
+    "5": {
+      "ux_m": -0.0006,
+      "uy_m": 0.0686,
+      "rz_m": -0.0004
+    }
+  },
+  "derivas_ey": {
+    "1": 0.0031,
+    "2": 0.0047,
+    "3": 0.0043,
+    "4": 0.0033,
+    "5": 0.002
+  },
+  "conservacion": {
+    "G": {
+      "q_kN_m2": 6.225,
+      "por_piso": {
+        "1": {
+          "suma_wL_modelo_kN": 4529.5,
+          "q_A_piso_kN": 4524.02,
+          "voladizos_kN": 0,
+          "diferencia_kN": 5.481,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "2": {
+          "suma_wL_modelo_kN": 4529.5,
+          "q_A_piso_kN": 4524.02,
+          "voladizos_kN": 0,
+          "diferencia_kN": 5.481,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "3": {
+          "suma_wL_modelo_kN": 5902.13,
+          "q_A_piso_kN": 4524.02,
+          "voladizos_kN": 1372.61,
+          "diferencia_kN": 5.497,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "4": {
+          "suma_wL_modelo_kN": 4529.5,
+          "q_A_piso_kN": 4524.02,
+          "voladizos_kN": 0,
+          "diferencia_kN": 5.481,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "5": {
+          "suma_wL_modelo_kN": 5117.62,
+          "q_A_piso_kN": 4524.02,
+          "voladizos_kN": 588.12,
+          "diferencia_kN": 5.481,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        }
+      },
+      "total_wL_modelo_kN": 24608.25,
+      "sigmaRz_kN": 24608.251,
+      "solape_area_tributaria_m2_por_piso": 726.75
+    },
+    "Q": {
+      "q_kN_m2": 3.92,
+      "por_piso": {
+        "1": {
+          "suma_wL_modelo_kN": 2852.31,
+          "q_A_piso_kN": 2848.86,
+          "voladizos_kN": 0,
+          "diferencia_kN": 3.452,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "2": {
+          "suma_wL_modelo_kN": 2852.31,
+          "q_A_piso_kN": 2848.86,
+          "voladizos_kN": 0,
+          "diferencia_kN": 3.452,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "3": {
+          "suma_wL_modelo_kN": 3716.68,
+          "q_A_piso_kN": 2848.86,
+          "voladizos_kN": 864.36,
+          "diferencia_kN": 3.461,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "4": {
+          "suma_wL_modelo_kN": 2852.31,
+          "q_A_piso_kN": 2848.86,
+          "voladizos_kN": 0,
+          "diferencia_kN": 3.452,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        },
+        "5": {
+          "suma_wL_modelo_kN": 3222.66,
+          "q_A_piso_kN": 2848.86,
+          "voladizos_kN": 370.35,
+          "diferencia_kN": 3.452,
+          "nota": "suma(wL) del modelo (Vz_i+Vz_j de las 27 vigas) vs q*A_piso + carga de voladizos del nivel"
+        }
+      },
+      "total_wL_modelo_kN": 15496.28,
+      "sigmaRz_kN": 15496.28,
+      "solape_area_tributaria_m2_por_piso": 726.75
+    },
+    "resumen_qG": {
+      "qG_suma_G_Q_kN_m2": 10.145,
+      "qG_nominal_kN_m2": 10.15
+    }
+  }
+}

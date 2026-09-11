@@ -1,0 +1,97 @@
+{
+  "seccion": {
+    "nombre": "COL_70",
+    "descripcion": "0.70x0.70 m, 12phi25 (4+4+4), rec. 40 mm, rho=1.20%",
+    "Ag_mm2": 490000.0,
+    "Ast_mm2": 5890.486225480862,
+    "rho_%": 1.202
+  },
+  "materiales": {
+    "hormigon_fc_MPa": 35.0,
+    "eps0": 0.002,
+    "eps_cu": 0.003,
+    "acero_fy_MPa": 420.0,
+    "Es_MPa": 200000.0,
+    "ey": 0.0021,
+    "eps_sh": 0.01,
+    "eps_su": 0.09,
+    "nota_curva_H": "Hognestad parabola+descenso lineal a 0.85 f'c",
+    "nota_acero": "bilineal con endurecimiento 0.5% Es"
+  },
+  "momento_curvatura_por_carga_axial": {
+    "P0": {
+      "P_kN": 0.0,
+      "phi_u": 0.04559500746402669,
+      "M_u_kNm": 804.7,
+      "causa_termino": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "EI0_kNm2": 149732.4,
+      "EIgg_kNm2": 556343.2,
+      "EI0_EIgg": 0.269,
+      "EI0_E0Ig": 0.214
+    },
+    "P2500": {
+      "P_kN": 2500.0,
+      "phi_u": 0.016661960756236386,
+      "M_u_kNm": 1426.5,
+      "causa_termino": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "EI0_kNm2": 726183.2,
+      "EIgg_kNm2": 556343.2,
+      "EI0_EIgg": 1.305,
+      "EI0_E0Ig": 1.037
+    },
+    "P5513": {
+      "P_kN": 5513.0,
+      "phi_u": 0.009799572253671642,
+      "M_u_kNm": 1773.3,
+      "causa_termino": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "EI0_kNm2": 714336.9,
+      "EIgg_kNm2": 556343.2,
+      "EI0_EIgg": 1.284,
+      "EI0_E0Ig": 1.02
+    }
+  },
+  "carga_axial_representativa": {
+    "justificacion": "P de la columna mas cargada (F-2, elem. 11020) con combinacion 1.2G+1.6Q",
+    "P_kN": 5513.0
+  },
+  "primer_fluencia_P5513": {
+    "phi_y": 0.005869985954964239,
+    "M_y_kNm": 1680.8
+  },
+  "termino_P5513": {
+    "phi_u": 0.009799572253671642,
+    "M_u_kNm": 1773.3,
+    "causa": "aplastamiento hormigon (eps_c >= eps_cu)"
+  },
+  "sensibilidad_discretizacion": [
+    {
+      "n_strips": 10,
+      "M_u_kNm": 1776.4,
+      "phi_u": 0.00971,
+      "causa": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "dif_Mu_pct_vs_80": 0.18
+    },
+    {
+      "n_strips": 20,
+      "M_u_kNm": 1772.1,
+      "phi_u": 0.0098,
+      "causa": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "dif_Mu_pct_vs_80": -0.062
+    },
+    {
+      "n_strips": 40,
+      "M_u_kNm": 1773.1,
+      "phi_u": 0.0098,
+      "causa": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "dif_Mu_pct_vs_80": -0.006
+    },
+    {
+      "n_strips": 80,
+      "M_u_kNm": 1773.2,
+      "phi_u": 0.0098,
+      "causa": "aplastamiento hormigon (eps_c >= eps_cu)",
+      "dif_Mu_pct_vs_80": 0.0
+    }
+  ],
+  "criterio_termino": "phi_u = min{ phi | eps_c(fibra extrema comprimida) >= 0.003 (aplastamiento hormigon)  OR  eps_s(barra mas traccionada) <= -0.09 (fractura acero) }"
+}

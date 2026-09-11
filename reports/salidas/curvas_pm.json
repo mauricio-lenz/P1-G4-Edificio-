@@ -1,0 +1,116 @@
+{
+  "secciones": {
+    "columna": {
+      "nombre": "COL_70",
+      "descripcion": "0.70x0.70 m, 12phi25 (4+4+4), rec. 40 mm, rho=1.20%"
+    },
+    "muro": {
+      "nombre": "MUR_20",
+      "descripcion": "muro e=20 cm, L=1.0 m, 2 capas phi12@200, rho_l=0.565%"
+    }
+  },
+  "verificacion_rc": {
+    "columna": {
+      "Pn0_kN": 16876.3,
+      "Pn0_max_permisible_08": 13501.0,
+      "balanceado": {
+        "c_mm": 388.2,
+        "Pb_kN": 7274.5,
+        "Mb_kNm": 1865.1
+      },
+      "flexion_pura_Mn_kNm": 791.6,
+      "Pn0_acero_apegado": 14577.5,
+      "rho_%": 1.202,
+      "formulas": {
+        "Pn0": "0.85 f'c (Ag - Ast) + fy Ast",
+        "cb": "eps_cu * d / (eps_cu + ey)",
+        "nota": "valores NOMINALES (sin factor phi); phi_ties=0.65, phi_flexion segun ACI"
+      }
+    },
+    "muro": {
+      "Pn0_kN": 6391.4,
+      "Pn0_max_permisible_08": 5113.1,
+      "balanceado": {
+        "c_mm": 529.4,
+        "Pb_kN": 2812.7,
+        "Mb_kNm": 879.1
+      },
+      "flexion_pura_Mn_kNm": 213.0,
+      "Pn0_acero_apegado": 5950.0,
+      "rho_%": 0.565,
+      "formulas": {
+        "Pn0": "0.85 f'c (Ag - Ast) + fy Ast",
+        "cb": "eps_cu * d / (eps_cu + ey)",
+        "nota": "valores NOMINALES (sin factor phi); phi_ties=0.65, phi_flexion segun ACI"
+      }
+    },
+    "criterios": {
+      "tipo_material": "G35 (f'c=35) / A63-42H (fy=420)",
+      "eps_cu": 0.003,
+      "eps0": 0.002,
+      "ey": 0.0021,
+      "eps_su": 0.09,
+      "modelo_hormigon": "parabola Hognestad + descenso lineal a 0.85 f'c, sin tracciòn",
+      "modelo_acero": "elastico-perfectamente plastico con endurecimiento 0.5% Es",
+      "nota": "valores nominales; DCR usa M_nom sin phi"
+    }
+  },
+  "demanda_capacidad": {
+    "columna_11020": {
+      "U1": {
+        "P_kN": 3496.1,
+        "My_kNm": 1.3,
+        "Mz_kNm": -15.0,
+        "M_efectivo_kNm": 15.0,
+        "M_nom_capacidad_kNm": 1600.2,
+        "DCR_M": 0.009,
+        "P_Pn0": 0.207
+      },
+      "U2": {
+        "P_kN": 5512.7,
+        "My_kNm": 2.0,
+        "Mz_kNm": -23.6,
+        "M_efectivo_kNm": 23.7,
+        "M_nom_capacidad_kNm": 1789.6,
+        "DCR_M": 0.013,
+        "P_Pn0": 0.327
+      },
+      "U3": {
+        "P_kN": 4609.9,
+        "My_kNm": 1155.2,
+        "Mz_kNm": -194.5,
+        "M_efectivo_kNm": 1171.4,
+        "M_nom_capacidad_kNm": 1714.7,
+        "DCR_M": 0.683,
+        "P_Pn0": 0.273
+      }
+    },
+    "muro_11033": {
+      "U3": {
+        "P_kN": 0.0,
+        "My_kNm": 800.7,
+        "Mz_kNm": 3.0,
+        "M_efectivo_kNm": 800.7,
+        "M_nom_capacidad_kNm": 260.6,
+        "DCR_M": 3.07
+      },
+      "U4": {
+        "P_kN": 0.0,
+        "My_kNm": -99.2,
+        "Mz_kNm": 40.5,
+        "M_efectivo_kNm": 107.2,
+        "M_nom_capacidad_kNm": 260.6,
+        "DCR_M": 0.41
+      }
+    }
+  },
+  "figuras": {
+    "columna": "C:\\Users\\mauwa\\OneDrive\\Documentos\\GitHub\\P1-G4-Edificio-\\reports\\fig\\pm_columna.png",
+    "muro": "C:\\Users\\mauwa\\OneDrive\\Documentos\\GitHub\\P1-G4-Edificio-\\reports\\fig\\pm_muro.png"
+  },
+  "criterios_grupo": [
+    "Armadura de la columna ASUMIDA 12phi25 (rho=1.20%), pendiente de confrontar con planos.",
+    "El muro se evalua con la seccion unitaria MUR_20 (1 m x 0.2 m, 2 capas phi12@200): la DCR > 1 no implica deficit real de la pared completa, sino que la representacion por unidad de longitud debe reemplazarse por la longitud real del muro.",
+    "El momento efectivo de la columna es M_t = sqrt(My^2 + Mz^2) (primer aproximación biaxial sobre la envolvente uniaxial)."
+  ]
+}

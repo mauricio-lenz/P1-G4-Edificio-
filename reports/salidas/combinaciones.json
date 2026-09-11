@@ -1,0 +1,398 @@
+{
+  "combinaciones": {
+    "U1": {
+      "nombre": "1.4 G",
+      "coefs": {
+        "G": 1.4
+      },
+      "suma_reacciones": [
+        -0.0,
+        -0.0,
+        34451.551,
+        7.133,
+        5.61,
+        -0.14
+      ]
+    },
+    "U2": {
+      "nombre": "1.2 G + 1.6 Q",
+      "coefs": {
+        "G": 1.2,
+        "Q": 1.6
+      },
+      "suma_reacciones": [
+        -0.0,
+        -0.0,
+        54323.95,
+        11.247,
+        8.846,
+        -0.221
+      ]
+    },
+    "U3": {
+      "nombre": "1.2 G + 1.0 Q + 1.0 EX",
+      "coefs": {
+        "G": 1.2,
+        "Q": 1.0,
+        "EX": 1.0
+      },
+      "suma_reacciones": [
+        -11824.283,
+        0.0,
+        45026.181,
+        -9.602,
+        -41100.384,
+        -157.734
+      ]
+    },
+    "U4": {
+      "nombre": "0.9 G + 1.0 EY",
+      "coefs": {
+        "G": 0.9,
+        "EY": 1.0
+      },
+      "suma_reacciones": [
+        -0.0,
+        -11824.283,
+        22147.426,
+        32025.853,
+        -203.439,
+        114.283
+      ]
+    }
+  },
+  "comparacion": {
+    "U1": [
+      {
+        "elementTag": 11020,
+        "descripcion": "Columna eje F-2 · nivel 1",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 3496.089995389933,
+            "directo": 3496.089995389934,
+            "dif_abs": -9.094947017729282e-13,
+            "dif_pct": -2.6014624994557338e-14
+          },
+          {
+            "componente": "My",
+            "superpuesto": 1.2697277001584124,
+            "directo": 1.2697277001583953,
+            "dif_abs": 1.709743457922741e-14,
+            "dif_pct": 1.3465434027385989e-12
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": -14.99414288520962,
+            "directo": -14.99414288520963,
+            "dif_abs": 1.0658141036401503e-14,
+            "dif_pct": 7.108202928301288e-14
+          }
+        ]
+      },
+      {
+        "elementTag": 20313,
+        "descripcion": "Viga dir X L=10.0m · nivel 3",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": -477.9172416806803,
+            "directo": -477.9172416806804,
+            "dif_abs": 5.684341886080802e-14,
+            "dif_pct": 1.189398789231962e-14
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": -4.407303971420711e-17,
+            "directo": 5.005438081827809e-16,
+            "dif_abs": -5.44616847896988e-16,
+            "dif_pct": -5.4461684789698796e-08
+          }
+        ]
+      },
+      {
+        "elementTag": 12007,
+        "descripcion": "Muro/nucleo (X=820, Y=7276) · nivel 2",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": -0.62640665661573,
+            "directo": -0.6264066566157405,
+            "dif_abs": 1.0436096431476471e-14,
+            "dif_pct": 1.666025787123513e-12
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 0.04335638857881261,
+            "directo": 0.04335638857881197,
+            "dif_abs": 6.38378239159465e-16,
+            "dif_pct": 1.4723971716395146e-12
+          }
+        ]
+      }
+    ],
+    "U2": [
+      {
+        "elementTag": 11020,
+        "descripcion": "Columna eje F-2 · nivel 1",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 5512.710122392249,
+            "directo": 5512.710122392251,
+            "dif_abs": -1.8189894035458565e-12,
+            "dif_pct": -3.2996282466535765e-14
+          },
+          {
+            "componente": "My",
+            "superpuesto": 2.002134028178632,
+            "directo": 2.002134028178628,
+            "dif_abs": 3.9968028886505635e-15,
+            "dif_pct": 1.9962713946211264e-13
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": -23.643087955083242,
+            "directo": -23.643087955083214,
+            "dif_abs": -2.842170943040401e-14,
+            "dif_pct": -1.2021149472691194e-13
+          }
+        ]
+      },
+      {
+        "elementTag": 20313,
+        "descripcion": "Viga dir X L=10.0m · nivel 3",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": -753.5902163139311,
+            "directo": -753.5902163139311,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": -6.044302589376975e-17,
+            "directo": -4.470265456726722e-16,
+            "dif_abs": 3.865835197789024e-16,
+            "dif_pct": 3.8658351977890244e-08
+          }
+        ]
+      },
+      {
+        "elementTag": 12017,
+        "descripcion": "Muro/nucleo (X=1480, Y=7276) · nivel 2",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": -0.9877315289975247,
+            "directo": -0.9877315289975344,
+            "dif_abs": 9.658940314238862e-15,
+            "dif_pct": 9.778912620154877e-13
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 0.06899269020172764,
+            "directo": 0.0689926902017275,
+            "dif_abs": 1.3877787807814457e-16,
+            "dif_pct": 2.011486690435934e-13
+          }
+        ]
+      }
+    ],
+    "U3": [
+      {
+        "elementTag": 11020,
+        "descripcion": "Columna eje F-2 · nivel 1",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 4609.871330188129,
+            "directo": 4609.8713301881335,
+            "dif_abs": -4.547473508864641e-12,
+            "dif_pct": -9.864643030457542e-14
+          },
+          {
+            "componente": "My",
+            "superpuesto": 1155.1768430227594,
+            "directo": 1155.1768430227592,
+            "dif_abs": 2.2737367544323206e-13,
+            "dif_pct": 1.9683018822318305e-14
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": -194.46654067279508,
+            "directo": -194.46654067279496,
+            "dif_abs": -1.1368683772161603e-13,
+            "dif_pct": -5.846087318069947e-14
+          }
+        ]
+      },
+      {
+        "elementTag": 20204,
+        "descripcion": "Viga dir X L=5.0m · nivel 2",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": 1684.0914640363446,
+            "directo": 1684.091464036345,
+            "dif_abs": -4.547473508864641e-13,
+            "dif_pct": -2.7002532855106854e-14
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 3.965099761551173e-14,
+            "directo": -3.986772646707427e-14,
+            "dif_abs": 7.9518724082586e-14,
+            "dif_pct": 7.9518724082586e-06
+          }
+        ]
+      },
+      {
+        "elementTag": 11033,
+        "descripcion": "Muro/nucleo (X=4250, Y=3576) · nivel 1",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": 800.6872134843328,
+            "directo": 800.687213484332,
+            "dif_abs": 7.958078640513122e-13,
+            "dif_pct": 9.939060480161954e-14
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 3.0107801320620884,
+            "directo": 3.0107801320620724,
+            "dif_abs": 1.5987211554602254e-14,
+            "dif_pct": 5.309989721385823e-13
+          }
+        ]
+      }
+    ],
+    "U4": [
+      {
+        "elementTag": 11021,
+        "descripcion": "Columna eje F-1 · nivel 1",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 2811.782394236284,
+            "directo": 2811.7823942362847,
+            "dif_abs": -9.094947017729282e-13,
+            "dif_pct": -3.2345842396525793e-14
+          },
+          {
+            "componente": "My",
+            "superpuesto": 62.72022304373938,
+            "directo": 62.72022304373932,
+            "dif_abs": 6.394884621840902e-14,
+            "dif_pct": 1.0195889477914147e-13
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 1722.5441532818763,
+            "directo": 1722.5441532818745,
+            "dif_abs": 1.8189894035458565e-12,
+            "dif_pct": 1.0559900018122786e-13
+          }
+        ]
+      },
+      {
+        "elementTag": 30200,
+        "descripcion": "Viga dir Y L=7.25m · nivel 2",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": 1983.9146394797442,
+            "directo": 1983.9146394797438,
+            "dif_abs": 4.547473508864641e-13,
+            "dif_pct": 2.2921719606127598e-14
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 1.57881352119071e-17,
+            "directo": 0.0,
+            "dif_abs": 1.57881352119071e-17,
+            "dif_pct": 1.5788135211907102e-09
+          }
+        ]
+      },
+      {
+        "elementTag": 11033,
+        "descripcion": "Muro/nucleo (X=4250, Y=3576) · nivel 1",
+        "filas": [
+          {
+            "componente": "P",
+            "superpuesto": 0.0,
+            "directo": 0.0,
+            "dif_abs": 0.0,
+            "dif_pct": 0.0
+          },
+          {
+            "componente": "My",
+            "superpuesto": -99.24312252026412,
+            "directo": -99.24312252026417,
+            "dif_abs": 4.263256414560601e-14,
+            "dif_pct": 4.295770131265367e-14
+          },
+          {
+            "componente": "Mz",
+            "superpuesto": 40.502219841004084,
+            "directo": 40.50221984100409,
+            "dif_abs": -7.105427357601002e-15,
+            "dif_pct": -1.7543303516434745e-14
+          }
+        ]
+      }
+    ]
+  }
+}
