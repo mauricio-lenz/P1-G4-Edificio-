@@ -5,8 +5,8 @@
       "descripcion": "0.70x0.70 m, 12phi25 (4+4+4), rec. 40 mm, rho=1.20%"
     },
     "muro": {
-      "nombre": "MUR_20 (L=9.42 m)",
-      "descripcion": "muro e=20 cm, L=9.42 m, 2 capas phi12@200, rho_l=0.564%"
+      "nombre": "MUR_20 (L=1 m)",
+      "descripcion": "muro e=20 cm, L=1 m, 2 capas phi12@200, rho_l=0.565%"
     }
   },
   "verificacion_rc": {
@@ -28,16 +28,16 @@
       }
     },
     "muro": {
-      "Pn0_kN": 60197.8,
-      "Pn0_max_permisible_08": 48158.2,
+      "Pn0_kN": 6391.4,
+      "Pn0_max_permisible_08": 5113.1,
       "balanceado": {
-        "c_mm": 5470.6,
-        "Pb_kN": 29561.8,
-        "Mb_kNm": 78299.0
+        "c_mm": 529.4,
+        "Pb_kN": 2812.7,
+        "Mb_kNm": 879.1
       },
-      "flexion_pura_Mn_kNm": 20174.6,
-      "Pn0_acero_apegado": 56049.0,
-      "rho_%": 0.564,
+      "flexion_pura_Mn_kNm": 224.3,
+      "Pn0_acero_apegado": 5950.0,
+      "rho_%": 0.565,
       "formulas": {
         "Pn0": "0.85 f'c (Ag - Ast) + fy Ast",
         "cb": "eps_cu * d / (eps_cu + ey)",
@@ -91,16 +91,16 @@
         "My_kNm": 800.7,
         "Mz_kNm": 3.0,
         "M_efectivo_kNm": 800.7,
-        "M_nom_capacidad_kNm": 20174.6,
-        "DCR_M": 0.04
+        "M_nom_capacidad_kNm": 224.3,
+        "DCR_M": 3.57
       },
       "U4": {
         "P_kN": 0.0,
         "My_kNm": -99.2,
         "Mz_kNm": 40.5,
         "M_efectivo_kNm": 107.2,
-        "M_nom_capacidad_kNm": 20174.6,
-        "DCR_M": 0.01
+        "M_nom_capacidad_kNm": 224.3,
+        "DCR_M": 0.48
       }
     }
   },
@@ -110,7 +110,7 @@
   },
   "criterios_grupo": [
     "Armadura de la columna ASUMIDA 12phi25 (rho=1.20%), pendiente de confrontar con planos.",
-    "El muro del nucleo se evalua con su LONGITUD REAL inferida (L=9.42 m, linea de muros 33/34/35 en X=42.50 m del modelo, 2 capas phi12@200): la DCR compara la demanda del tramo (My=800.7 kN·m, nivel 1) contra la capacidad de esa linea. Pendiente de confirmar la longitud con los planos.",
+    "El muro se evalua con el pier equivalente del modelo (MUR_20, L=1.0 m): la DCR > 1 indica que la representacion por metro debe reemplazarse por el muro con su longitud real en el modelo. Se descarto sumar la capacidad continua inferida (L~9.4 m) por mezclar demanda del pier con capacidad de toda la linea.",
     "El momento efectivo de la columna es M_t = sqrt(My^2 + Mz^2) (primer aproximación biaxial sobre la envolvente uniaxial)."
   ]
 }

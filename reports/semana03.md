@@ -237,16 +237,16 @@ La envolvente es convexa y el punto balanceado (P ≈ 7 274 kN) está por encima
 
 ## 7. Curva P-M del muro (MUR_20)
 
-**MUR_20** con la **longitud real del muro del núcleo**: espesor 0,20 m × **L = 9,42 m** (línea de muros 33/34/35 del modelo en X = 42,50 m, Y = 35,77 → 45,19 m), con armadura vertical de 2 mallas φ12@200 (47 estaciones × 2φ12 → Ast = 10 631 mm², **ρ_l = 0,564 %**) distribuida en el largo. Curva de interacción (dirección fuerte, d = L = 9,42 m):
+**MUR_20** del modelo: espesor 0,20 m × longitud equivalente **1,0 m** (pier unitario) con armadura vertical de 2 mallas φ12@200 (10φ12 → Ast = 1 131 mm², **ρ_l = 0,565 %**). Curva de interacción (dirección fuerte, d = L = 1,0 m):
 
 | Punto | P [kN] | M [kN·m] |
 |---|---|---|
-| Compresión pura (0,85·f'c·Ag + fy·Ast) | 60 198 | 0 |
-| Descompresión (c = H, ε_inf = 0) | 52 549 | 43 892 |
-| Balanceado | 29 562 | 78 299 |
-| Flexión pura (P = 0) | ≈ 0 | **20 175** |
+| Compresión pura (0,85·f'c·Ag + fy·Ast) | 6 391 | 0 |
+| Descompresión (c = H, ε_inf = 0) | 5 582 | 494 |
+| Balanceado | 2 813 | 879 |
+| Flexión pura (P = 0) | ≈ 0 | **224** |
 
-> Al usar la longitud real (9,42 m), la capacidad de la línea de muro es casi dos órdenes mayor que la del pier unitario de 1 m y la demanda sísmica del tramo (≈800 kN·m) queda **dentro de la envolvente** (ver §9). La longitud se infirió de la geometría del modelo; debe confirmarse con los planos (ver §10). Figura: `reports/fig/pm_muro.png`.
+> **Decisión de modelo**: se evaluó también una línea continua con L=9,42 m (muros 33/34/35 colineales), que arroja capacidades de orden 60 000 kN / 20 000 kN·m. Esos valores son aritméticamente correctos pero **no se adoptaron**: mezclan la demanda del pier (800,7 kN·m, elemento 11033 del modelo elástico) con la capacidad de toda la línea, y el modelo representa el núcleo con piers sueltos de 1,0 m separados ~4,7 m. La DCR de §9 se hace, por lo tanto, sobre el **pier del modelo**; corregirla exige re-modelar el muro con su longitud real en el propio modelo elástico (ver §10). Figura: `reports/fig/pm_muro.png`.
 
 ---
 
@@ -256,11 +256,11 @@ Verificación con las fórmulas de compresión/control de ACI 318 (valores **nom
 
 | Magnitud | Columna COL_70 | Muro MUR_20 |
 |---|---|---|
-| **Pn0 = 0,85·f'c·(Ag − Ast) + fy·Ast** [kN] | **16 876** | **60 198** |
-| Límite 0,8·Pn0 [kN] | 13 501 | 48 158 |
-| Punto balanceado (Pb, Mb) | (7 274 kN; 1 865 kN·m) | (29 562 kN; 78 299 kN·m) |
-| Flexión pura Mn [kN·m] | 804 | 20 175 |
-| ρ [%] | 1,20 | 0,564 |
+| **Pn0 = 0,85·f'c·(Ag − Ast) + fy·Ast** [kN] | **16 876** | **6 391** |
+| Límite 0,8·Pn0 [kN] | 13 501 | 5 113 |
+| Punto balanceado (Pb, Mb) | (7 274 kN; 1 865 kN·m) | (2 813 kN; 879 kN·m) |
+| Flexión pura Mn [kN·m] | 804 | 224 |
+| ρ [%] | 1,20 | 0,565 |
 
 Chequeo ACI de compresión pura: el término de la "meseta" 0,85·f'c actúa sobre (Ag−Ast) y el acero se lleva su fy; el punto balanceado se calcula con `c_b = εcu·d/(εcu + εy)`. Los tres valores característicos (Pn0, balanceado, flexión pura) quedan sobre la curva P-M, cerrándose la verificación de consistencia entre la fórmula de compresión pura y el integratorio de fibras.
 
@@ -275,13 +275,13 @@ Se ubican las **demandas reales** (de `combinaciones.json`, superposición valid
 | Columna F‑2 (11020) · niv. 1 | U1 (1,4G) | 3 496,1 | 1,3 | −15,0 | 15,0 | 1 576,7 | 0,26 | 0,010 |
 | Columna F‑2 (11020) · niv. 1 | U2 (1,2G+1,6Q) | 5 512,7 | 2,0 | −23,6 | 23,7 | 1 773,6 | 0,41 | 0,013 |
 | Columna F‑2 (11020) · niv. 1 | U3 (1,2G+Q+EX) | 4 609,9 | 1 155,2 | −194,5 | 1 171,4 | 1 694,8 | 0,34 | **0,69** |
-| Muro núcleo 11033 · niv. 1 | U3 (1,2G+Q+EX) | 0,0 | 800,7 | 3,0 | 800,7 | 20 174,6 | — | 0,04 |
-| Muro núcleo 11033 · niv. 1 | U4 (0,9G+EY) | 0,0 | −99,2 | 40,5 | 107,2 | 20 174,6 | — | 0,01 |
+| Muro núcleo 11033 · niv. 1 | U3 (1,2G+Q+EX) | 0,0 | 800,7 | 3,0 | 800,7 | 224,3 | — | **3,57** ⚠ |
+| Muro núcleo 11033 · niv. 1 | U4 (0,9G+EY) | 0,0 | −99,2 | 40,5 | 107,2 | 224,3 | — | 0,48 |
 
 Lectura:
 
 - **Columna OK.** El caso más exigente es U3 (sísmico +X) con **DCR = 0,69**: el punto de demanda (P≈4 610 kN, M≈1 171 kN·m) cae dentro de la envolvente con ~31% de holgura. La combinación gravitatoria U2 controla la **axial** (P/(0,8·Pn0) = 0,41 < 1).
-- **Muro OK con la longitud real del núcleo.** Con MUR_20 de L=9,42 m la capacidad en el plano a P=0 es M≈20 175 kN·m y las demandas U3/U4 quedan **dentro de la envolvente** con gran holgura (DCR ≈ 0,04). Nota de consistencia: la demanda usada (My=800,7 kN·m) es la del tramo unitario del modelo (11033); al modelar la línea completa el momento de la pared se redistribuye sobre su longitud, por lo que conviene re-correr la demanda sobre el muro real. La longitud L=9,42 m es una inferencia de la geometría del modelo (muros 33/34/35 colineales en X=42,50 m) pendiente de confirmar con los planos (ver §10).
+- **Muro ⚠ es un marcador de revisión del modelo, no un diagnóstico de colapso.** Con el pier del modelo (L=1,0 m), la demanda en el plano del núcleo (M = 800,7 kN·m, P ≈ 0) supera la capacidad de rigidez del tramo (224,3 kN·m → DCR = 3,57). Causas y límites del chequeo: (i) el muro del modelo es un **pier de 1,0 m**, no la pared real; por eso la capacidad es de tramo y no de la pared completa; (ii) los muros no reciben carga gravitatoria en el modelo (P=0), lo que los deja en la rama baja de la envolvente; (iii) la demanda elástica corresponde al cortante sísmico de la masa sin reducción. La corrección requiere **re-modelar el muro con su longitud real dentro del propio modelo elástico** (no basta escalar la sección en el post-proceso: mezcla demanda del pier con capacidad de línea) y repartir la carga gravitatoria del núcleo (ver §10).
 
 ---
 
@@ -294,7 +294,7 @@ Como trabajo académico, se explicita qué se delegó a IA generativa y qué cri
 3. **Parámetros sísmicos**: A0, S, I y R adoptados con más de una justificación; el **C adoptado (0,25)** se eligió deliberadamente por encima del C calculado (0,21) como criterio conservador y debe revisarse frente al espectro de la normativa (la fórmula de período corto es una simplificación).
 4. **Armadura asumida**: 12φ25 (columna) y 2 mallas φ12@200 (muro) son **supuestos de diseño del grupo** para la cadena demanda-capacidad; deben confrontarse con los planos antes del diseño definitivo.
 5. **Convención de dirección del muro y momento biaxial**: la demanda del muro se tomó de su momento local dominante (My) y la de la columna con `√(My²+Mz²)`; ambas convenciones quedan señaladas para re-chequeo.
-6. **Detección de inconsistencia del modelo por la IA**: al cerrar la demanda-capacidad, el proceso detectó que (a) los muros tienen P≈0 (no están en el camino gravitatorio real) y (b) la DCR del muro > 1 con el pier de 1,0 m era un artefacto de la representación unitaria, que se resolvió evaluando la **longitud real de la línea del núcleo (L=9,42 m, inferida de los muros 33/34/35 colineales)**. Ambas siguen pendientes de validar con los planos y de corregir en el modelo (repartir carga gravitatoria a los muros y correr la demanda sobre el muro continuo).
+6. **Detección de inconsistencia del modelo por la IA**: al cerrar la demanda-capacidad, el proceso detectó que (a) los muros tienen P≈0 (no están en el camino gravitatorio real) y (b) la DCR > 1 del pier del muro. Se **descartó** la tentación de escalar la sección a la longitud continua inferida (9,42 m → 60 000 kN) por mezclar demanda del pier con capacidad de toda la línea; la corrección legítima es **re-modelar el muro con su longitud real** y repartir la carga gravitatoria, tarea de la próxima iteración.
 7. **Validación sistemática**: la superposición (0,0000% de error), la conservación piso a piso (≤0,03 %) y la convergencia con el nº de fibras (<0,2 %) se generaron como *checks* obligatorios de cualquier script asistido por IA antes de usar sus números.
 
 ---
