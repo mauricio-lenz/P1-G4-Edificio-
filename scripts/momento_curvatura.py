@@ -189,7 +189,17 @@ def integrar_pm(sec, strips, c):
 
 
 def puntos_pm(sec, n_strips=64, c_max=None):
-    """Barrido de P-M: P desde compresion pura hasta traccion pura."""
+    """Barrido de P-M: P desde compresion pura hasta traccion pura.
+
+    Convencion teorica (diagramas de interaccion):
+      - compresion pura (P0, M=0)
+      - recta hasta el PUNTO DE DESCOMPRESION (c=H, fibra inferior con
+        eps=0): entre compresion pura y ese punto el ACI/CIRSOC no basa el
+        trazado en la fibra aplastada (daria P no monotonica por la rama
+        descendente), se conecta con una linea recta.
+      - a partir de ahi el barrido por compatibilidad (c de H a muy
+        negativo) genera balanceado, flexion pura y traccion pura.
+    """
     H = sec.H
     if c_max is None:
         c_max = 1.6 * H
@@ -199,11 +209,15 @@ def puntos_pm(sec, n_strips=64, c_max=None):
     P0 = 0.85 * FC * (sec.Ag - sec.Ast) + FY * sec.Ast   # N
     pts = [(P0, 0.0, 0.0, "compresion pura (Pn0)")]
 
+    # Punto de descompresion (c = H): fibra inferior justo en eps = 0
+    Pd, Md = integrar_pm(sec, strips, H)
+    pts.append((Pd, abs(Md), H, "descompresion (c=H)"))
+
     zb = max(z for _, z in sec.barras)
     cb = EPSCU * zb / (EPSCU + EY)                        # ACI 22.2.7: balanceado
     cs = np.unique(np.concatenate([
-        np.linspace(c_max, cb, 500),                       # compression -> balanceado
-        np.linspace(cb, -c_max, 500),                      # balanceado -> traccion
+        np.linspace(H, cb, 600),                           # descompresion -> balanceado
+        np.linspace(cb, -c_max, 600),                      # balanceado -> traccion
     ]))[::-1]
     for c in cs:
         P, M = integrar_pm(sec, strips, c)

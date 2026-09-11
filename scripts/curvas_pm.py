@@ -55,17 +55,21 @@ def curva_pm(sec, n_strips=64):
     return env
 
 
-def capacidad_a_P(env, P_d, tol_frac=0.015):
+def capacidad_a_P(env, P_d):
     """Capacidad M en la envolvente para la axial demandada P_d (kN).
 
-    Toma el maximo M entre los puntos con axial cercana a P_d.
+    Interpola sobre la frontera exterior de la envolvente (un solo M por
+    cada P en la rama comprimida): evita el salto del 'maximo en banda'.
     """
-    pmax = max((p for p, _ in env), default=0.0)
-    tol = max(tol_frac * pmax, 1.0)
-    cand = [m for p, m in env if abs(p - P_d) <= tol]
-    if not cand:
-        cand = [m for p, m in env if (p - P_d) * (p - P_d) < 1e12]
-    return max(cand) if cand else None
+    outer = {}
+    for p, m in env:
+        outer[p] = max(outer.get(p, -1.0), m)
+    pts = sorted(outer.items())
+    ps = np.array([p for p, _ in pts])
+    ms = np.array([m for _, m in pts])
+    if P_d >= ps.max():
+        return float(ms.max())
+    return float(np.interp(P_d, ps, ms))
 
 
 def verificar_rc(sec, env):
@@ -75,9 +79,8 @@ def verificar_rc(sec, env):
     Pn0 = (0.85 * FC * (Ag - Ast) + FY * Ast) / 1e3     # kN
     cb, Pb, Mb = punto_balance(sec)
     cb_, Pb_, Mb_ = cb, Pb / 1e3, Mb / 1e6     # N -> kN, N·mm -> kN·m
-    # flexa pura: punto de la envolvente con axial mas cercana a cero
-    mn_cero = min(env, key=lambda t: abs(t[0]))
-    Mn_puro = mn_cero[1]
+    # flexa pura: capacidad interpolada en P = 0 (coincide con la DCR)
+    Mn_puro = capacidad_a_P(env, 0.0)
     pb = (Pb_, Mb_)
     return {
         "Pn0_kN": round(Pn0, 1),
