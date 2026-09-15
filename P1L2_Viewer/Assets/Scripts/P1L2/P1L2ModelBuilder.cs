@@ -14,7 +14,7 @@ namespace P1L2.Viewer
         public bool buildOnStart = true;
         public bool showLabels = false;
         public bool unirEdificios = true;
-        public bool voladizoSimetrico = true;
+        public bool voladizoSimetrico = false;
 
         public readonly List<GameObject> ElementObjects = new List<GameObject>();
 

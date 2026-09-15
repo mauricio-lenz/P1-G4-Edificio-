@@ -4327,26 +4327,44 @@
      "qQ": 2.942
     }
    ],
-   "voladizos": [
-    {
-     "id": "VOL-ESTE",
-     "nivel": "Piso3",
-     "e": 0.15,
-     "x_min": 53.932,
-     "x_max": 58.932,
-     "y_min": 62.88,
-     "y_max": 79.031
-    },
-    {
-     "id": "VOL-ESTE",
-     "nivel": "Piso4",
-     "e": 0.15,
-     "x_min": 53.932,
-     "x_max": 58.932,
-     "y_min": 62.88,
-     "y_max": 79.031
-    }
-   ],
+"voladizos": [
+     {
+      "id": "VOL-ESTE",
+      "nivel": "Piso3",
+      "e": 0.15,
+      "x_min": 53.932,
+      "x_max": 58.932,
+      "y_min": 62.88,
+      "y_max": 79.031
+     },
+     {
+      "id": "VOL-ESTE",
+      "nivel": "Piso4",
+      "e": 0.15,
+      "x_min": 53.932,
+      "x_max": 58.932,
+      "y_min": 62.88,
+      "y_max": 79.031
+     },
+     {
+      "id": "VOL-NORTE",
+      "nivel": "Piso1",
+      "e": 0.15,
+      "x_min": 18.932,
+      "x_max": 28.932,
+      "y_min": 57.88,
+      "y_max": 62.88
+     },
+     {
+      "id": "VOL-NORTE",
+      "nivel": "Piso2",
+      "e": 0.15,
+      "x_min": 18.932,
+      "x_max": 28.932,
+      "y_min": 57.88,
+      "y_max": 62.88
+     }
+    ],
    "apoyos": [
     {
      "node": 100000,
