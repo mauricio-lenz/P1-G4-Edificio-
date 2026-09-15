@@ -21,6 +21,7 @@ namespace P1L2.Viewer
         private Dictionary<int, NodeJson>[] nodeIdx;
         private Dictionary<string, float>[] elev;       // nivel → elevation por edificio
         private readonly Vector2[] planOff = new Vector2[2]; // desplazamiento plano por edificio
+        private readonly float[] elevOff = new float[2];  // desplazamiento vertical por edificio
 
         private Material matCol, matVig, matMuro, matNodo, matApoyo,
                          matSlab, matVol, matDia, matL1, matL2, matL3;
@@ -62,21 +63,26 @@ namespace P1L2.Viewer
         private void ComputePlanOffsets()
         {
             planOff[0] = planOff[1] = Vector2.zero;
+            elevOff[0] = elevOff[1] = 0f;
             if (!unirEdificios || model.edificios.Count != 2) return;
 
             var mins = new Vector2[2];
             var maxs = new Vector2[2];
+            var maxZ = new float[2];
             for (int ie = 0; ie < 2; ie++)
             {
                 float mnx = float.MaxValue, mny = float.MaxValue;
                 float mxx = float.MinValue, mxy = float.MinValue;
+                float mz = float.MinValue;
                 foreach (var n in model.edificios[ie].nodos)
                 {
                     mnx = Mathf.Min(mnx, n.x); mxx = Mathf.Max(mxx, n.x);
                     mny = Mathf.Min(mny, n.y); mxy = Mathf.Max(mxy, n.y);
+                    mz = Mathf.Max(mz, n.z);
                 }
                 mins[ie] = new Vector2(mnx, mny);
                 maxs[ie] = new Vector2(mxx, mxy);
+                maxZ[ie] = mz;
             }
 
             int A = model.edificios[0].nodos.Count >= model.edificios[1].nodos.Count ? 0 : 1;
@@ -97,11 +103,17 @@ namespace P1L2.Viewer
                 planOff[B].x = mins[A].x - mins[B].x;
                 planOff[B].y = maxs[A].y - mins[B].y;
             }
+
+            // techos a la misma altura: sube el edificio más bajo hasta igualar
+            // el nivel superior del más alto
+            float top = Mathf.Max(maxZ[A], maxZ[B]);
+            elevOff[0] = top - maxZ[0];
+            elevOff[1] = top - maxZ[1];
         }
 
         private Vector3 ToUnity(int ie, float x, float y, float z)
         {
-            return CoordinateMap.OsToUnity(x + planOff[ie].x, y + planOff[ie].y, z);
+            return CoordinateMap.OsToUnity(x + planOff[ie].x, y + planOff[ie].y, z + elevOff[ie]);
         }
 
         /* ------------------------------------------------------------------ */
