@@ -45,49 +45,51 @@ namespace EdificioUnity
         {
             var canvas = GetComponent<Canvas>();
 
-            // panel derecho (inspector)
+            // panel izquierdo (inspector)
             var panel = new GameObject("PanelInspector");
             panel.transform.SetParent(canvas.transform, false);
             var img = panel.AddComponent<Image>();
-            img.color = new Color(0, 0, 0, 0.55f);
+            img.color = new Color(0, 0, 0, 0.6f);
             var rt = panel.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0.68f, 0.05f);
-            rt.anchorMax = new Vector2(0.99f, 0.85f);
+            rt.anchorMin = new Vector2(0.02f, 0.06f);
+            rt.anchorMax = new Vector2(0.36f, 0.92f);
             rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
 
-            _titulo = Texto("Titulo", canvas.transform, 26, TextAnchor.UpperLeft);
-            _titulo.rectTransform.anchorMin = new Vector2(0.69f, 0.8f);
-            _titulo.rectTransform.anchorMax = new Vector2(0.98f, 0.9f);
+            _titulo = Texto("Titulo", canvas.transform, 24, TextAnchor.UpperLeft);
+            _titulo.color = new Color(1f, 0.85f, 0.4f);
+            _titulo.rectTransform.anchorMin = new Vector2(0.03f, 0.86f);
+            _titulo.rectTransform.anchorMax = new Vector2(0.35f, 0.93f);
 
-            _info = Texto("Info", canvas.transform, 17, TextAnchor.UpperLeft);
-            _info.rectTransform.anchorMin = new Vector2(0.70f, 0.10f);
-            _info.rectTransform.anchorMax = new Vector2(0.98f, 0.78f);
+            _info = Texto("Info", canvas.transform, 16, TextAnchor.UpperLeft);
+            _info.rectTransform.anchorMin = new Vector2(0.03f, 0.10f);
+            _info.rectTransform.anchorMax = new Vector2(0.35f, 0.84f);
             _info.color = new Color(0.95f, 0.96f, 1f);
             _info.horizontalOverflow = HorizontalWrapMode.Wrap;
             _info.verticalOverflow = VerticalWrapMode.Truncate;
             _info.lineSpacing = 1.15f;
             _info.alignment = TextAnchor.UpperLeft;
 
-            _combo = Texto("Combo", canvas.transform, 22, TextAnchor.UpperLeft);
-            _combo.rectTransform.anchorMin = new Vector2(0.69f, 0.90f);
-            _combo.rectTransform.anchorMax = new Vector2(0.98f, 0.96f);
+            _combo = Texto("Combo", canvas.transform, 18, TextAnchor.UpperLeft);
+            _combo.rectTransform.anchorMin = new Vector2(0.68f, 0.90f);
+            _combo.rectTransform.anchorMax = new Vector2(0.98f, 0.94f);
             _combo.color = new Color(1f, 0.85f, 0.4f);
-            _combo.alignment = TextAnchor.UpperLeft;
+            _combo.alignment = TextAnchor.UpperRight;
 
-            _ayuda = Texto("Ayuda", canvas.transform, 14, TextAnchor.UpperLeft);
-            _ayuda.rectTransform.anchorMin = new Vector2(0.01f, 0.94f);
-            _ayuda.rectTransform.anchorMax = new Vector2(0.66f, 0.99f);
+            _ayuda = Texto("Ayuda", canvas.transform, 13, TextAnchor.UpperLeft);
+            _ayuda.rectTransform.anchorMin = new Vector2(0.02f, 0.94f);
+            _ayuda.rectTransform.anchorMax = new Vector2(0.65f, 0.99f);
             _ayuda.color = new Color(0.75f, 0.78f, 0.85f);
             _ayuda.alignment = TextAnchor.UpperLeft;
             _ayuda.text =
-                "CLICK: seleccionar elemento\n" +
-                "1-4: combo U1..U4   |   D: deformada\n" +
-                "M: momento    A: axial    V: corte\n" +
-                "S: apoyos   T: areas tributarias   C: cargas\n" +
-                "ESC: deseleccionar   (eje local en los nodos)";
+                "CLICK: seleccionar\n" +
+                "1-4 combos  |  D deformada\n" +
+                "M momento  A axial  V corte\n" +
+                "S apoyos  T areas  C cargas\n" +
+                "ESC deseleccionar\n" +
+                "Raton derecho + WASD/QE: mover camara";
 
             _btnCombo = Boton("BtnCombo", "Combo >", canvas.transform,
-                              new Vector2(0.02f, 0.90f), new Vector2(0.15f, 0.94f));
+                              new Vector2(0.84f, 0.95f), new Vector2(0.98f, 0.99f));
             _btnCombo.onClick.AddListener(() =>
                 EdificioManager.Current?.CiclarCombo());
         }
@@ -134,6 +136,21 @@ namespace EdificioUnity
                       $"   Vy = {res.Vy:0.0} kN    Vz = {res.Vz:0.0} kN\n" +
                       $"   T = {res.T:0.0} kN·m\n" +
                       $"   My = {res.My:0.0} kN·m    Mz = {res.Mz:0.0} kN·m");
+        }
+
+        public void MostrarLosa(LosaData ld)
+        {
+            _titulo.text = $"LOSA nivel {ld.nivel}  ·  {ld.nombre}";
+            _combo.text = "";
+            _info.text =
+                $"→ Nivel: {ld.nivel}   z = {ld.z_m:0.00} m\n" +
+                $"→ Area: {ld.area_m2:0.00} m²\n" +
+                $"→ Espesor: {ld.espesor_m * 100f:0} cm\n" +
+                $"→ Peso propio: {ld.ppLosakNm2:0.00} kN/m²\n" +
+                $"→ Carga gravitacional q_G: {ld.qGkNm2:0.00} kN/m²\n" +
+                $"   U1 (1,4G): {1.4f * ld.qGkNm2:0.00} kN/m²\n" +
+                $"   U2 (1,2G+1,6Q): {1.2f * ld.qGkNm2 + 1.6f * 3.92f:0.00} kN/m²\n" +
+                $"   U3 (1,2G+Q+EX): {1.2f * ld.qGkNm2 + 3.92f:0.00} kN/m²";
         }
 
         public void CampearCombo(string combo) => _combo.text =

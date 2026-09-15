@@ -23,6 +23,7 @@ namespace EdificioUnity
         public string ComboActual = "U3";
         public bool enabledDeformada;
         public ElementoView Seleccion;
+        public LosaData LosaSeleccionada;
         public TipoDiagrama TipoDiagramaActivo;
 
         // escalas de normalizacion de las coloraciones
@@ -120,6 +121,18 @@ namespace EdificioUnity
                 {
                     color = new Color(0.55f, 0.6f, 0.55f, 1f)
                 };
+
+                var mc = go.AddComponent<MeshCollider>();
+                mc.sharedMesh = mesh;
+
+                var ld = go.AddComponent<LosaData>();
+                ld.nivel = L["nivel"] != null ? L["nivel"].Value<int>() : 0;
+                ld.nombre = L["nombre"]?.ToString() ?? "Losa";
+                ld.z_m = (float)(L["z_m"]?.Value<double>() ?? 0.0);
+                ld.area_m2 = CalcularAreaMesh(mesh);
+                ld.espesor_m = 0.15f;
+                ld.ppLosakNm2 = 3.675f;
+                ld.qGkNm2 = 10.15f;
             }
         }
 
@@ -230,6 +243,21 @@ namespace EdificioUnity
             return 3.96 * nivel;
         }
 
+        static float CalcularAreaMesh(Mesh m)
+        {
+            float area = 0f;
+            var verts = m.vertices;
+            var tris = m.triangles;
+            for (int i = 0; i < tris.Length; i += 3)
+            {
+                Vector3 v0 = verts[tris[i]];
+                Vector3 v1 = verts[tris[i + 1]];
+                Vector3 v2 = verts[tris[i + 2]];
+                area += Vector3.Cross(v1 - v0, v2 - v0).magnitude * 0.5f;
+            }
+            return area;
+        }
+
         static Mesh CubeMesh()
         {
             var m = new Mesh();
@@ -315,6 +343,7 @@ namespace EdificioUnity
         // ------------------------------------------------------------------ seleccion
         public void Seleccionar(ElementoView ev, bool inicial)
         {
+            LosaSeleccionada = null;
             if (Seleccion != null) Seleccion.Resaltar(false);
             Seleccion = ev;
             if (ev != null)
@@ -336,6 +365,16 @@ namespace EdificioUnity
 
         public ElementoView FindView(int tag) =>
             _elementos.Find(e => e.elementTag == tag);
+
+        public void SeleccionarLosa(LosaData ld)
+        {
+            if (Seleccion != null) Seleccion.Resaltar(false);
+            Seleccion = null;
+            LosaSeleccionada = ld;
+            _ui?.MostrarLosa(ld);
+            _panelDc?.Ocultar();
+            _diag?.Ocultar();
+        }
 
         void Update()
         {
@@ -363,6 +402,8 @@ namespace EdificioUnity
                 {
                     var ev = hit.collider.GetComponent<ElementoView>();
                     if (ev != null) { Seleccionar(ev, false); return; }
+                    var ld = hit.collider.GetComponent<LosaData>();
+                    if (ld != null) { SeleccionarLosa(ld); return; }
                 }
                 Seleccionar(null, false);
             }
