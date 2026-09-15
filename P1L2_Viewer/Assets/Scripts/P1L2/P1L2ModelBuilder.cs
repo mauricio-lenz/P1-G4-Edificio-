@@ -14,6 +14,7 @@ namespace P1L2.Viewer
         public bool buildOnStart = true;
         public bool showLabels = false;
         public bool unirEdificios = true;
+        public bool voladizoSimetrico = true;
 
         public readonly List<GameObject> ElementObjects = new List<GameObject>();
 
@@ -22,6 +23,8 @@ namespace P1L2.Viewer
         private Dictionary<string, float>[] elev;       // nivel → elevation por edificio
         private readonly Vector2[] planOff = new Vector2[2]; // desplazamiento plano por edificio
         private readonly float[] elevOff = new float[2];  // desplazamiento vertical por edificio
+        private Vector2[] minsBB = new Vector2[2];
+        private Vector2[] maxsBB = new Vector2[2];
 
         private Material matCol, matVig, matMuro, matNodo, matApoyo,
                          matSlab, matVol, matDia, matL1, matL2, matL3;
@@ -51,6 +54,7 @@ namespace P1L2.Viewer
                     elev[ie][lv.id] = lv.elevation;
             }
             ComputePlanOffsets();
+            MirrorVoladizos();
             ElementObjects.Clear();
             for (int ie = 0; ie < 2; ie++)
                 BuildEdificio(model.edificios[ie], ie);
@@ -64,10 +68,10 @@ namespace P1L2.Viewer
         {
             planOff[0] = planOff[1] = Vector2.zero;
             elevOff[0] = elevOff[1] = 0f;
+            minsBB[0] = minsBB[1] = Vector2.zero;
+            maxsBB[0] = maxsBB[1] = Vector2.zero;
             if (!unirEdificios || model.edificios.Count != 2) return;
 
-            var mins = new Vector2[2];
-            var maxs = new Vector2[2];
             var maxZ = new float[2];
             for (int ie = 0; ie < 2; ie++)
             {
@@ -80,28 +84,28 @@ namespace P1L2.Viewer
                     mny = Mathf.Min(mny, n.y); mxy = Mathf.Max(mxy, n.y);
                     mz = Mathf.Max(mz, n.z);
                 }
-                mins[ie] = new Vector2(mnx, mny);
-                maxs[ie] = new Vector2(mxx, mxy);
+                minsBB[ie] = new Vector2(mnx, mny);
+                maxsBB[ie] = new Vector2(mxx, mxy);
                 maxZ[ie] = mz;
             }
 
             int A = model.edificios[0].nodos.Count >= model.edificios[1].nodos.Count ? 0 : 1;
             int B = 1 - A;
 
-            float dxA = maxs[A].x - mins[A].x, dyA = maxs[A].y - mins[A].y;
-            float dxB = maxs[B].x - mins[B].x, dyB = maxs[B].y - mins[B].y;
+            float dxA = maxsBB[A].x - minsBB[A].x, dyA = maxsBB[A].y - minsBB[A].y;
+            float dxB = maxsBB[B].x - minsBB[B].x, dyB = maxsBB[B].y - minsBB[B].y;
 
             if (dxA >= dyA && dxB >= dyB)
             {
                 // ambos más largos en x → unir a lo largo de x
-                planOff[B].y = mins[A].y - mins[B].y;   // alinear rangos y
-                planOff[B].x = mins[A].x - maxs[B].x;   // izquierdo A = derecho B
+                planOff[B].y = minsBB[A].y - minsBB[B].y; // alinear rangos y
+                planOff[B].x = minsBB[A].x - maxsBB[B].x; // izquierdo A = derecho B
             }
             else
             {
                 // fallback: unir a lo largo de y
-                planOff[B].x = mins[A].x - mins[B].x;
-                planOff[B].y = maxs[A].y - mins[B].y;
+                planOff[B].x = minsBB[A].x - minsBB[B].x;
+                planOff[B].y = maxsBB[A].y - minsBB[B].y;
             }
 
             // techos a la misma altura: sube el edificio más bajo hasta igualar
@@ -109,6 +113,59 @@ namespace P1L2.Viewer
             float top = Mathf.Max(maxZ[A], maxZ[B]);
             elevOff[0] = top - maxZ[0];
             elevOff[1] = top - maxZ[1];
+        }
+
+        // Si un edificio tiene voladizos y el otro no, refleja el voladizo en el
+        // extremo libre del otro (mismo vuelo y niveles superiores) para que el
+        // conjunto continuo luzca simétrico.
+        private void MirrorVoladizos()
+        {
+            if (!voladizoSimetrico || model.edificios.Count != 2) return;
+            int src = -1, dst = -1;
+            if (model.edificios[0].voladizos.Count > 0 && model.edificios[1].voladizos.Count == 0)
+            {
+                src = 0; dst = 1;
+            }
+            else if (model.edificios[1].voladizos.Count > 0 && model.edificios[0].voladizos.Count == 0)
+            {
+                src = 1; dst = 0;
+            }
+            else return;
+
+            var volS = model.edificios[src].voladizos;
+            var edD = model.edificios[dst];
+
+            float dx = 0f, e = 0f;
+            var levels = new List<string>();
+            foreach (var v in volS)
+            {
+                dx = Mathf.Max(dx, v.x_max - maxsBB[src].x);
+                e = v.e;
+                if (!levels.Contains(v.nivel)) levels.Add(v.nivel);
+            }
+            if (dx <= 0f || levels.Count == 0) return;
+
+            var hasLosa = new HashSet<string>();
+            foreach (var s in edD.losas) hasLosa.Add(s.nivel);
+            var tops = new List<string>();
+            foreach (var lv in edD.niveles)
+                if (hasLosa.Contains(lv.id)) tops.Add(lv.id);
+            tops.Sort((a, b) => elev[dst][b].CompareTo(elev[dst][a]));
+            tops = tops.GetRange(0, Mathf.Min(levels.Count, tops.Count));
+
+            foreach (var nv in tops)
+            {
+                edD.voladizos.Add(new VoladizoJson
+                {
+                    id = "VOL-OESTE",
+                    nivel = nv,
+                    e = e,
+                    x_min = minsBB[dst].x - dx,
+                    x_max = minsBB[dst].x,
+                    y_min = minsBB[dst].y,
+                    y_max = maxsBB[dst].y
+                });
+            }
         }
 
         private Vector3 ToUnity(int ie, float x, float y, float z)
