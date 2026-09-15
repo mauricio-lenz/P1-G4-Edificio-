@@ -89,7 +89,7 @@ namespace P1L2.Viewer
             {
                 // ambos más largos en x → unir a lo largo de x
                 planOff[B].y = mins[A].y - mins[B].y;   // alinear rangos y
-                planOff[B].x = maxs[A].x - mins[B].x;   // derecho A = izquierdo B
+                planOff[B].x = mins[A].x - maxs[B].x;   // izquierdo A = derecho B
             }
             else
             {
