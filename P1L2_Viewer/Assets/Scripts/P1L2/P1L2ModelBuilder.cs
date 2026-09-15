@@ -56,8 +56,9 @@ namespace P1L2.Viewer
         }
 
         // Si unirEdificios está activo, elimina el hueco entre los dos edificios
-        // trasladando en planta al de menos nodos hasta tocar el borde del otro,
-        // de modo que el conjunto quede continuo (sin separación visible).
+        // uniéndolos por su lado angosto (cara corta). Si ambos son más largos
+        // en x, se unen a lo largo de x (borde derecho A = borde izquierdo B)
+        // y se alinean sus rangos en y para que queden contiguos sin separación.
         private void ComputePlanOffsets()
         {
             planOff[0] = planOff[1] = Vector2.zero;
@@ -81,21 +82,20 @@ namespace P1L2.Viewer
             int A = model.edificios[0].nodos.Count >= model.edificios[1].nodos.Count ? 0 : 1;
             int B = 1 - A;
 
-            float gapY = 0f, gapX = 0f;
-            if (mins[A].y >= maxs[B].y) gapY = mins[A].y - maxs[B].y;
-            else if (mins[B].y >= maxs[A].y) gapY = mins[B].y - maxs[A].y;
-            if (mins[A].x >= maxs[B].x) gapX = mins[A].x - maxs[B].x;
-            else if (mins[B].x >= maxs[A].x) gapX = mins[B].x - maxs[A].x;
+            float dxA = maxs[A].x - mins[A].x, dyA = maxs[A].y - mins[A].y;
+            float dxB = maxs[B].x - mins[B].x, dyB = maxs[B].y - mins[B].y;
 
-            if (gapY > gapX && gapY > 0.01f)
+            if (dxA >= dyA && dxB >= dyB)
             {
-                if (mins[A].y > maxs[B].y) planOff[B].y += gapY;
-                else planOff[B].y -= gapY;
+                // ambos más largos en x → unir a lo largo de x
+                planOff[B].y = mins[A].y - mins[B].y;   // alinear rangos y
+                planOff[B].x = maxs[A].x - mins[B].x;   // derecho A = izquierdo B
             }
-            else if (gapX > 0.01f)
+            else
             {
-                if (mins[A].x > maxs[B].x) planOff[B].x += gapX;
-                else planOff[B].x -= gapX;
+                // fallback: unir a lo largo de y
+                planOff[B].x = mins[A].x - mins[B].x;
+                planOff[B].y = maxs[A].y - mins[B].y;
             }
         }
 
