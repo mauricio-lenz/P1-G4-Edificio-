@@ -1,2 +1,10 @@
 __pycache__/
 *.pyc
+# Unity (proyecto PostprocP1A4) - carpetas transitorias generadas por el editor
+Library/
+Temp/
+Logs/
+UserSettings/
+obj/
+*.csproj
+*.sln
