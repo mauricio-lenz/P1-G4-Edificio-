@@ -13,12 +13,14 @@ namespace P1L2.Viewer
         public TextAsset modelJson;
         public bool buildOnStart = true;
         public bool showLabels = false;
+        public bool unirEdificios = true;
 
         public readonly List<GameObject> ElementObjects = new List<GameObject>();
 
         private ModelDataP1L2 model;
         private Dictionary<int, NodeJson>[] nodeIdx;
         private Dictionary<string, float>[] elev;       // nivel → elevation por edificio
+        private readonly Vector2[] planOff = new Vector2[2]; // desplazamiento plano por edificio
 
         private Material matCol, matVig, matMuro, matNodo, matApoyo,
                          matSlab, matVol, matDia, matL1, matL2, matL3;
@@ -47,9 +49,59 @@ namespace P1L2.Viewer
                 foreach (var lv in model.edificios[ie].niveles)
                     elev[ie][lv.id] = lv.elevation;
             }
+            ComputePlanOffsets();
             ElementObjects.Clear();
             for (int ie = 0; ie < 2; ie++)
                 BuildEdificio(model.edificios[ie], ie);
+        }
+
+        // Si unirEdificios está activo, elimina el hueco entre los dos edificios
+        // trasladando en planta al de menos nodos hasta tocar el borde del otro,
+        // de modo que el conjunto quede continuo (sin separación visible).
+        private void ComputePlanOffsets()
+        {
+            planOff[0] = planOff[1] = Vector2.zero;
+            if (!unirEdificios || model.edificios.Count != 2) return;
+
+            var mins = new Vector2[2];
+            var maxs = new Vector2[2];
+            for (int ie = 0; ie < 2; ie++)
+            {
+                float mnx = float.MaxValue, mny = float.MaxValue;
+                float mxx = float.MinValue, mxy = float.MinValue;
+                foreach (var n in model.edificios[ie].nodos)
+                {
+                    mnx = Mathf.Min(mnx, n.x); mxx = Mathf.Max(mxx, n.x);
+                    mny = Mathf.Min(mny, n.y); mxy = Mathf.Max(mxy, n.y);
+                }
+                mins[ie] = new Vector2(mnx, mny);
+                maxs[ie] = new Vector2(mxx, mxy);
+            }
+
+            int A = model.edificios[0].nodos.Count >= model.edificios[1].nodos.Count ? 0 : 1;
+            int B = 1 - A;
+
+            float gapY = 0f, gapX = 0f;
+            if (mins[A].y >= maxs[B].y) gapY = mins[A].y - maxs[B].y;
+            else if (mins[B].y >= maxs[A].y) gapY = mins[B].y - maxs[A].y;
+            if (mins[A].x >= maxs[B].x) gapX = mins[A].x - maxs[B].x;
+            else if (mins[B].x >= maxs[A].x) gapX = mins[B].x - maxs[A].x;
+
+            if (gapY > gapX && gapY > 0.01f)
+            {
+                if (mins[A].y > maxs[B].y) planOff[B].y += gapY;
+                else planOff[B].y -= gapY;
+            }
+            else if (gapX > 0.01f)
+            {
+                if (mins[A].x > maxs[B].x) planOff[B].x += gapX;
+                else planOff[B].x -= gapX;
+            }
+        }
+
+        private Vector3 ToUnity(int ie, float x, float y, float z)
+        {
+            return CoordinateMap.OsToUnity(x + planOff[ie].x, y + planOff[ie].y, z);
         }
 
         /* ------------------------------------------------------------------ */
@@ -107,16 +159,16 @@ namespace P1L2.Viewer
 
             // losas y voladizos (requieren elevación)
             foreach (var s in ed.losas)
-                ElementObjects.Add(BuildSlab(s, grpS, elev[ie][s.nivel]));
+                ElementObjects.Add(BuildSlab(s, ie, grpS, elev[ie][s.nivel]));
             foreach (var v in ed.voladizos)
-                ElementObjects.Add(BuildVoladizo(v, root, elev[ie][v.nivel]));
+                ElementObjects.Add(BuildVoladizo(v, ie, root, elev[ie][v.nivel]));
 
             // barras
             foreach (var e in ed.elementos)
             {
                 Transform parent = e.kind == "column" ? grpC :
                                    e.kind == "beam"   ? grpV : grpM;
-                var go = BuildBarra(e, nodeIdx[ie], parent);
+                var go = BuildBarra(e, ie, nodeIdx[ie], parent);
                 ElementObjects.Add(go);
                 BuildAxes(e, go.transform, parent);
                 BuildLabel(e, go.transform, parent);
@@ -124,15 +176,15 @@ namespace P1L2.Viewer
 
             // nodos
             foreach (var n in ed.nodos)
-                BuildNodo(n, grp);
+                BuildNodo(n, ie, grp);
 
             // apoyos
             foreach (var a in ed.apoyos)
-                BuildApoyo(a, nodeIdx[ie], grpA);
+                BuildApoyo(a, ie, nodeIdx[ie], grpA);
 
             // diafragmas (barras delgado master → slaves)
             foreach (var d in ed.diafragmas)
-                BuildDiafragma(d, nodeIdx[ie], grpD);
+                BuildDiafragma(d, ie, nodeIdx[ie], grpD);
         }
 
         private static Transform Group(string name, Transform parent)
@@ -146,12 +198,12 @@ namespace P1L2.Viewer
         /*  Barras (columnas / vigas / muros)                                   */
         /* ------------------------------------------------------------------ */
 
-        private GameObject BuildBarra(ElementoJson e,
+        private GameObject BuildBarra(ElementoJson e, int ie,
                                       Dictionary<int, NodeJson> nodes,
                                       Transform parent)
         {
-            Vector3 p1 = CoordinateMap.OsToUnity(nodes[e.i].x, nodes[e.i].y, nodes[e.i].z);
-            Vector3 p2 = CoordinateMap.OsToUnity(nodes[e.j].x, nodes[e.j].y, nodes[e.j].z);
+            Vector3 p1 = ToUnity(ie, nodes[e.i].x, nodes[e.i].y, nodes[e.i].z);
+            Vector3 p2 = ToUnity(ie, nodes[e.j].x, nodes[e.j].y, nodes[e.j].z);
             Vector3 dir = p2 - p1;
             float len = dir.magnitude;
             float r = e.kind == "column" ? 0.45f
@@ -232,7 +284,7 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
         /*  Losas (cubos translúcidos)                                          */
         /* ------------------------------------------------------------------ */
 
-        private GameObject BuildSlab(SlabJson s, Transform parent, float zElev)
+        private GameObject BuildSlab(SlabJson s, int ie, Transform parent, float zElev)
         {
             Vector3 centro = SlabCentroid(s.polygon);
             float dx = SlabRangeX(s.polygon);
@@ -241,7 +293,7 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = s.id;
             go.transform.localScale = new Vector3(dx, s.e, dy);
-            go.transform.position = CoordinateMap.OsToUnity(
+            go.transform.position = ToUnity(ie,
                 centro.x, centro.y, zElev + s.e / 2f);
             go.GetComponent<Renderer>().sharedMaterial = matSlab;
             go.transform.SetParent(parent, false);
@@ -275,7 +327,7 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
         /*  Voladizos (cubos ámbar)                                             */
         /* ------------------------------------------------------------------ */
 
-        private GameObject BuildVoladizo(VoladizoJson v, Transform parent, float zElev)
+        private GameObject BuildVoladizo(VoladizoJson v, int ie, Transform parent, float zElev)
         {
             float xmid = (v.x_min + v.x_max) / 2f;
             float ymid = (v.y_min + v.y_max) / 2f;
@@ -285,7 +337,7 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = v.id;
             go.transform.localScale = new Vector3(dx, v.e, dy);
-            go.transform.position = CoordinateMap.OsToUnity(
+            go.transform.position = ToUnity(ie,
                 xmid, ymid, zElev + v.e / 2f);
             go.GetComponent<Renderer>().sharedMaterial = matVol;
             go.transform.SetParent(parent, false);
@@ -297,11 +349,11 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
         /*  Nodos (esferas grises)                                              */
         /* ------------------------------------------------------------------ */
 
-        private void BuildNodo(NodeJson n, Transform parent)
+        private void BuildNodo(NodeJson n, int ie, Transform parent)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.name = $"N_{n.tag}";
-            go.transform.position = CoordinateMap.OsToUnity(n.x, n.y, n.z);
+            go.transform.position = ToUnity(ie, n.x, n.y, n.z);
             go.transform.localScale = Vector3.one * 0.44f;
             go.GetComponent<Renderer>().sharedMaterial = matNodo;
             go.transform.SetParent(parent, false);
@@ -312,12 +364,12 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
         /*  Apoyos (esferas verdes)                                             */
         /* ------------------------------------------------------------------ */
 
-        private void BuildApoyo(ApoyoJson a, Dictionary<int, NodeJson> nodes, Transform parent)
+        private void BuildApoyo(ApoyoJson a, int ie, Dictionary<int, NodeJson> nodes, Transform parent)
         {
             var n = nodes[a.node];
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.name = $"Apoyo_{a.node}";
-            go.transform.position = CoordinateMap.OsToUnity(n.x, n.y, n.z);
+            go.transform.position = ToUnity(ie, n.x, n.y, n.z);
             go.transform.localScale = Vector3.one * 0.50f;
             go.GetComponent<Renderer>().sharedMaterial = matApoyo;
             go.transform.SetParent(parent, false);
@@ -327,16 +379,16 @@ private void BuildLabel(ElementoJson e, Transform elem, Transform parent)
         /*  Diafragmas (cilindros delgados entre master y slaves)               */
         /* ------------------------------------------------------------------ */
 
-        private void BuildDiafragma(DiafragmaJson d,
+        private void BuildDiafragma(DiafragmaJson d, int ie,
                                     Dictionary<int, NodeJson> nodes,
                                     Transform parent)
         {
             var m = nodes[d.master];
-            Vector3 pM = CoordinateMap.OsToUnity(m.x, m.y, m.z);
+            Vector3 pM = ToUnity(ie, m.x, m.y, m.z);
             foreach (int sid in d.nodes)
             {
                 var s = nodes[sid];
-                Vector3 pS = CoordinateMap.OsToUnity(s.x, s.y, s.z);
+                Vector3 pS = ToUnity(ie, s.x, s.y, s.z);
                 Vector3 dir = pS - pM;
                 float len = dir.magnitude;
                 SpawnCylinder((pM + pS) / 2f, dir, len, 0.05f,
